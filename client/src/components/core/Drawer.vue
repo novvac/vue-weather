@@ -2,8 +2,11 @@
     <v-navigation-drawer
         app
         right
+        width="32%"
+        class="pa-16"
+        floating
     >
-        <slot/>
+        NAVIGATION DRAWER
     </v-navigation-drawer>
 </template>
 

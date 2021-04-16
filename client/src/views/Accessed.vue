@@ -1,8 +1,10 @@
 <template>
   <div class="accessed">
-    <Drawer>
-      Right drawer
-    </Drawer>
+    <!-- Application right navigation drawer -->
+    <Drawer/>
+
+    <!-- Accessed content (cities etc.) -->
+    <Main/>
   </div>
 </template>
 
@@ -11,13 +13,15 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import Drawer from '../components/core/Drawer.vue'
+import Main from '../components/core/Main.vue'
 
 @Component({
   components: {
     Drawer,
+    Main,
   }
 })
-export default class Home extends Vue {
-  
+export default class Accessed extends Vue {
+  name: "Accessed"
 }
 </script>
