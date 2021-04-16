@@ -12,3 +12,9 @@ import Component from 'vue-class-component';
 @Component
 export default class BaseInput extends Vue {}
 </script>
+
+<style lang="scss">
+.v-input {
+    flex: none;
+}
+</style>
