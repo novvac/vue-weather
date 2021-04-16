@@ -56,6 +56,8 @@
                         style="width: 100%"
                         hint="Adres email"
                         color="white"
+                        type="email"
+                        v-model="credentials.email"
                     />
                     <base-input
                         placeholder="Password"
@@ -67,6 +69,7 @@
                         style="width: 100%"
                         color="white"
                         type="password"
+                        v-model="credentials.password"
                     />
                     <base-input
                         placeholder="Repeat password"
@@ -79,6 +82,7 @@
                         color="white"
                         type="password"
                         v-if="!logging"
+                        v-model="credentials.repassword"
                     />
                     <p class="body-1 mt-2 mb-8 caption" v-if="!logging">By creating an account, you accept the <a href="#terms-and-conditions">terms and conditions</a> of our website.</p>
 
@@ -87,7 +91,7 @@
                         x-large
                         rounded
                         color="red"
-                        disabled
+                        :disabled="!credentialsComplete"
                     >
                         {{logging ? "Sign in" : "Sign up"}}
                     </base-button>
@@ -98,12 +102,31 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component';
+import { Vue, Component, Watch } from 'vue-property-decorator'
 
 @Component
 export default class Auth extends Vue {
     logging = false;
+    credentials = {};
+    credentialsComplete = false;
+
+    @Watch('credentials', {deep: true})
+    @Watch('logging')
+    onCredentialsChanged() {
+        let flag = true;
+        const keys = Object.keys(this.credentials);
+
+        (keys.includes("email") && this.credentials.email.length > 0) ? null : flag = false;
+        (keys.includes("password") && this.credentials.password.length > 0) ? null : flag = false;
+        if(!this.logging)
+            (keys.includes("repassword") && this.credentials.repassword.length > 0) ? null : flag = false;
+
+        if(flag) {
+            this.credentialsComplete = true;
+        } else {
+            this.credentialsComplete = false;
+        }
+    }
 }
 </script>
 
