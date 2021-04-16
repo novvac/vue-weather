@@ -28,7 +28,22 @@
                 />
             </v-row>
 
-            <div>element</div>
+            <div class="mt-10">
+                <v-row class="ma-0">
+                    <base-button
+                        v-for="(item, i) in periods"
+                        :key="item.text"
+                        large
+                        class="mr-10 text-none body-2 elevation-0"
+                        :color="activePeriod === i ? 'primary' : null"
+                        @click="changePeriod(i)"
+                    >
+                        {{item.text}}
+                    </base-button>
+                </v-row>
+
+                noice
+            </div>
         </v-container>
     </v-main>
 </template>
@@ -61,7 +76,26 @@ export default class Main extends Vue {
             city: "London",
             country: "UK"
         },
-    ]
+    ];
+    activePeriod = 0;
+    periods =  [
+        {
+            text: "Week"
+        },
+        {
+            text: "Month"
+        },
+        {
+            text: "3 month"
+        },
+        {
+            text: "6 month"
+        }
+    ];
+
+    changePeriod(index) {
+        this.activePeriod = index;
+    }
 }
 </script>
 
