@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Vue weather allows users to select cities and checking weather details in each of them!",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev-server": "nodemon index.js",
     "dev-client": "cd client && npm run serve"
