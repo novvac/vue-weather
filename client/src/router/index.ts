@@ -10,6 +10,11 @@ const routes: Array<RouteConfig> = [
     name: 'Accessed',
     component: Accessed
   },
+  {
+    path: "/authorization",
+    name: "Authorization",
+    component: () => import('../views/Auth.vue')
+  },
 ]
 
 const router = new VueRouter({
