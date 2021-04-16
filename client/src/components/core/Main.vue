@@ -42,7 +42,18 @@
                     </base-button>
                 </v-row>
 
-                noice
+                <v-simple-table class="transparent mt-3">
+                    <!-- <template v-slot:default>
+                        <tbody>
+                            <tr
+                                v-for="(row) in dataset.daily"
+                                :key="row.dt"
+                            >
+                                <td>data row</td>
+                            </tr>
+                        </tbody>
+                    </template> -->
+                </v-simple-table>
             </div>
         </v-container>
     </v-main>
@@ -71,11 +82,6 @@ export default class Main extends Vue {
             city: "London",
             country: "UK"
         },
-        {
-            src: "https://upload.wikimedia.org/wikipedia/commons/8/82/London_Big_Ben_Phone_box.jpg",
-            city: "London",
-            country: "UK"
-        },
     ];
     activePeriod = 0;
     periods =  [
@@ -88,9 +94,6 @@ export default class Main extends Vue {
         {
             text: "3 month"
         },
-        {
-            text: "6 month"
-        }
     ];
 
     changePeriod(index) {
@@ -111,5 +114,9 @@ export default class Main extends Vue {
             margin-right: 0 !important;
         }
     }
+}
+.v-data-table td {
+    padding: 0 !important;
+    border-bottom: 0 !important;
 }
 </style>
