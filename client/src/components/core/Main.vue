@@ -24,9 +24,11 @@
                     v-for="item in cities"
                     :key="item.city"
                     :city="item"
-                    class="mr-12"
+                    class="mr-12 d-block"
                 />
             </v-row>
+
+            <div>element</div>
         </v-container>
     </v-main>
 </template>
@@ -48,6 +50,11 @@ export default class Main extends Vue {
             src: "https://i.pinimg.com/originals/21/eb/1f/21eb1f1de25367847e8b41a9149db65a.jpg",
             city: "Paris",
             country: "France"
+        },
+        {
+            src: "https://upload.wikimedia.org/wikipedia/commons/8/82/London_Big_Ben_Phone_box.jpg",
+            city: "London",
+            country: "UK"
         },
         {
             src: "https://upload.wikimedia.org/wikipedia/commons/8/82/London_Big_Ben_Phone_box.jpg",
