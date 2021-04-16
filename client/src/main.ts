@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import './components/base/index';
+import VueParticles from 'vue-particles';
 
 Vue.config.productionTip = false
+Vue.use(VueParticles);
 
 new Vue({
   router,
