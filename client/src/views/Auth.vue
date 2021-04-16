@@ -45,6 +45,15 @@
                         {{logging ? "Logging into app" : "Create free account"}}
                     </span>
 
+                    <base-button
+                        small
+                        outlined
+                        class="mt-5 d-md-none"
+                        @click="logging = !logging"
+                    >
+                        {{logging ? "Sign up" : "Sign in"}}
+                    </base-button>
+
                     <p class="body-1 mt-8 mb-6">Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
                     <base-input
                         placeholder="Email address"
