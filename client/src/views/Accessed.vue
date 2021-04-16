@@ -1,6 +1,8 @@
 <template>
-  <div class="home">
-    
+  <div class="accessed">
+    <Drawer>
+      Right drawer
+    </Drawer>
   </div>
 </template>
 
@@ -8,7 +10,13 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-@Component
+import Drawer from '../components/core/Drawer.vue'
+
+@Component({
+  components: {
+    Drawer,
+  }
+})
 export default class Home extends Vue {
   
 }
