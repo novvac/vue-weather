@@ -21,7 +21,11 @@ import Main from '../components/core/Main.vue'
     Main,
   }
 })
-export default class Accessed extends Vue {
-  name: "Accessed"
-}
+export default class Accessed extends Vue {}
 </script>
+
+<style lang="scss">
+.accessed, .v-main {
+  height: 100%;
+}
+</style>
