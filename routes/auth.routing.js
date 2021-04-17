@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import keys from '../config/keys.js';
 
 import User from '../models/User.js';
 
@@ -53,10 +55,13 @@ router.post("/login", async (req, res) => {
         bcrypt.compare(req.body.password, user.password).then(pwdCorrect => {
             if(pwdCorrect) {
                 const payload = {
+                    id: user.id
+                };
 
-                }
+                const token = jwt.sign(payload, keys.secretOrKey, {expiresIn: 1200});
 
-                res.status(200).json("ok");
+                res.cookie("token", token, {httpOnly: true, path: "/"});
+                return res.status(200).json("Logged");
             } else {
                 res.status(400).json({password: "Hasło niepoprawne!"});
             }
