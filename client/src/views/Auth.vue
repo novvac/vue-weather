@@ -116,22 +116,23 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 @Component
 export default class Auth extends Vue {
     logging = false;
-    credentials = {};
+    credentials = {
+        email: "",
+        password: "",
+        repassword: "",
+    };
     credentialsComplete = false;
 
     @Watch('credentials', {deep: true})
     @Watch('logging')
     onCredentialsChanged() {
-        let flag = true;
-        const keys = Object.keys(this.credentials);
-
-        (keys.includes("email") && this.credentials.email.length > 0) ? null : flag = false;
-        (keys.includes("password") && this.credentials.password.length > 0) ? null : flag = false;
-        if(!this.logging)
-            (keys.includes("repassword") && this.credentials.repassword.length > 0) ? null : flag = false;
-
-        if(flag) {
+        if(this.credentials.email.length > 0 && this.credentials.password.length > 0) {
             this.credentialsComplete = true;
+
+            if(!this.logging) {
+                if(this.credentials.repassword.length === 0)
+                    this.credentialsComplete = false;
+            }
         } else {
             this.credentialsComplete = false;
         }

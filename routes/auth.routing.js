@@ -37,4 +37,11 @@ router.post('/register', (req, res) => {
     })
 });
 
+// @route POST api/auth/login
+// @desc Login user
+// @access Public
+router.post("/login", (req, res) => {
+    res.status(200).json("ok");
+})
+
 export default router;
