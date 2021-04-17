@@ -60,8 +60,10 @@ router.post("/login", async (req, res) => {
 
                 const token = jwt.sign(payload, keys.secretOrKey, {expiresIn: 1200});
 
+                const {password, __v, _id, ...rest} = user._doc;
+
                 res.cookie("token", token, {httpOnly: true, path: "/"});
-                return res.status(200).json("Logged");
+                return res.status(200).json(rest);
             } else {
                 res.status(400).json({password: "Hasło niepoprawne!"});
             }

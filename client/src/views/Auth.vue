@@ -121,6 +121,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
+import store from '../store/index';
 
 @Component
 export default class Auth extends Vue {
@@ -176,6 +177,7 @@ export default class Auth extends Vue {
                 this.credentials = {email: "", password: "", repassword: ""};
                 
                 if(this.logging) {
+                    store.dispatch("SET_USER", res.data);
                     this.$router.push("/");
                 } else {
                     this.message = "Success! Account was created!";
