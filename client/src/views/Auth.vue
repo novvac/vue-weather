@@ -176,7 +176,7 @@ export default class Auth extends Vue {
                 this.credentials = {email: "", password: "", repassword: ""};
                 
                 if(this.logging) {
-                    console.log(res);
+                    this.$router.push("/");
                 } else {
                     this.message = "Success! Account was created!";
                 }
