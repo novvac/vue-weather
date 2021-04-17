@@ -10,12 +10,12 @@ import axios from 'axios';
 Vue.config.productionTip = false
 Vue.use(VueParticles);
 
-const axiosConfig = {
+const axiosInstance = axios.create({
   baseURL: 'http://192.168.43.5:8081/api/v1/',
   timeout: 30000,
-};
+})
 
-Vue.prototype.$axios = axios.create(axiosConfig);
+Vue.prototype.$http = axiosInstance;
 
 new Vue({
   router,

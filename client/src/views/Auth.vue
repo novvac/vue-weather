@@ -67,6 +67,8 @@
                         color="white"
                         type="email"
                         v-model="credentials.email"
+                        :error="Boolean(errors.email)"
+                        :error-messages="errors.email"
                     />
                     <base-input
                         placeholder="Password"
@@ -79,6 +81,8 @@
                         color="white"
                         type="password"
                         v-model="credentials.password"
+                        :error="Boolean(errors.password)"
+                        :error-messages="errors.password"
                     />
                     <base-input
                         placeholder="Repeat password"
@@ -92,6 +96,8 @@
                         type="password"
                         v-if="!logging"
                         v-model="credentials.repassword"
+                        :error="Boolean(errors.repassword)"
+                        :error-messages="errors.repassword"
                     />
                     <p class="body-1 mt-2 mb-8 caption" v-if="!logging">By creating an account, you accept the <a href="#terms-and-conditions">terms and conditions</a> of our website.</p>
 
@@ -100,10 +106,14 @@
                         x-large
                         rounded
                         color="red"
-                        :disabled="!credentialsComplete"
+                        :disabled="!credentialsComplete || loading"
+                        :loading="loading"
+                        @click="logging ? signIn() : signUp()"
                     >
                         {{logging ? "Sign in" : "Sign up"}}
                     </base-button>
+
+                    <p class="mt-3 caption font-weight-bold success--text" v-if="message.length > 0">{{message}}</p>
                 </v-container>
             </v-col>
         </v-row>
@@ -116,12 +126,15 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 @Component
 export default class Auth extends Vue {
     logging = false;
+    loading = false;
+    errors = {};
     credentials = {
         email: "",
         password: "",
         repassword: "",
     };
     credentialsComplete = false;
+    message = "";
 
     @Watch('credentials', {deep: true})
     @Watch('logging')
@@ -136,6 +149,35 @@ export default class Auth extends Vue {
         } else {
             this.credentialsComplete = false;
         }
+    }
+
+    @Watch('logging')
+    onLoggingChanged() {
+        this.errors = {};
+        this.message = "";
+    }
+
+    @Watch('loading')
+    onLoadingChanged(val: boolean) {
+        // loading started (delete errors)
+        if(val) {
+            this.errors = {};
+        }
+    }
+
+    signUp() {
+        this.loading = true;
+        this.$http.post("auth/register", this.credentials)
+            .then(res => {
+                this.loading = false;
+                this.errors = {};
+                this.credentials = {email: "", password: "", repassword: ""};
+                this.message = "Success! Account was created!";
+            })
+            .catch(err => {
+                this.errors = err.response.data;
+                this.loading = false;
+            })
     }
 }
 </script>
