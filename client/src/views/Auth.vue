@@ -108,7 +108,7 @@
                         color="red"
                         :disabled="!credentialsComplete || loading"
                         :loading="loading"
-                        @click="logging ? signIn() : signUp()"
+                        @click="submitForm()"
                     >
                         {{logging ? "Sign in" : "Sign up"}}
                     </base-button>
@@ -165,14 +165,21 @@ export default class Auth extends Vue {
         }
     }
 
-    signUp() {
+    submitForm() {
         this.loading = true;
-        this.$http.post("auth/register", this.credentials)
+        const url = this.logging ? "/auth/login" : "/auth/register";
+        
+        this.$http.post(url, this.credentials)
             .then(res => {
                 this.loading = false;
                 this.errors = {};
                 this.credentials = {email: "", password: "", repassword: ""};
-                this.message = "Success! Account was created!";
+                
+                if(this.logging) {
+                    console.log(res.data);
+                } else {
+                    this.message = "Success! Account was created!";
+                }
             })
             .catch(err => {
                 this.errors = err.response.data;

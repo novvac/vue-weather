@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 
 import validateRegister from '../validators/registerValidator.js';
+import validateLogin from '../validators/loginValidator.js';
 
 // @route POST api/auth/register
 // @desc Register new user
@@ -16,9 +17,9 @@ router.post('/register', (req, res) => {
         return res.status(400).json(errors);
     }
 
-    User.findOne({userName: req.body.userName}).then(doc => {
+    User.findOne({email: req.body.email}).then(doc => {
         if(doc) {
-            return res.status(400).json({userName: "Użytkownik o takiej nazwie już istnieje!"});
+            return res.status(400).json({email: "Ten adres email został już wykorzystany!"});
         } else {
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(req.body.password, salt, (err, hash) => {
@@ -40,8 +41,29 @@ router.post('/register', (req, res) => {
 // @route POST api/auth/login
 // @desc Login user
 // @access Public
-router.post("/login", (req, res) => {
-    res.status(200).json("ok");
+router.post("/login", async (req, res) => {
+    // validate inputs
+    const { errors, isValid } = validateLogin(req.body);
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    let user = await User.findOne({email: req.body.email});
+    if(user) {
+        bcrypt.compare(req.body.password, user.password).then(pwdCorrect => {
+            if(pwdCorrect) {
+                const payload = {
+
+                }
+
+                res.status(200).json("ok");
+            } else {
+                res.status(400).json({password: "Hasło niepoprawne!"});
+            }
+        })
+    } else {
+        return res.status(404).json({email: "Konto z podanym adresem email nie istnieje!"});
+    }
 })
 
 export default router;
