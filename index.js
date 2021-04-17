@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import keys from './config/keys.js';
+import passport from './config/passport.js';
 
 // routing
 import auth from './routes/auth.routing.js';
@@ -21,6 +22,9 @@ mongoose.connection.on("error", console.error.bind(console, "connection error:")
 mongoose.connection.once('open', () => {
     console.log("MongoDB", "Database was connected!");
 })
+
+// passport
+app.use(passport.initialize());
 
 // api
 app.use("/api/v1/auth", auth);
