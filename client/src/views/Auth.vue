@@ -167,7 +167,7 @@ export default class Auth extends Vue {
 
     submitForm() {
         this.loading = true;
-        const url = this.logging ? "/auth/login" : "/auth/register";
+        const url = this.logging ? "/api/auth/login" : "/api/auth/register";
         
         this.$http.post(url, this.credentials)
             .then(res => {
