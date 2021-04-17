@@ -1,7 +1,7 @@
 <template>
     <div class="auth">
         <v-row class="ma-0" :style="{flexDirection: 'row' + (logging ? '-reverse' : '')}">
-            <v-col cols="5" class="red d-none d-md-block pa-0" style="position: relative;">
+            <v-col cols="5" :class="[logging ? 'primary' : 'red', 'd-none', 'd-md-block', 'pa-0']" style="position: relative;">
                 <vue-particles
                     class="particles"
                     color="#dedede"
@@ -39,9 +39,9 @@
                 </div>
             </v-col>
 
-            <v-col cols="12" :md="7">
+            <v-col cols="12" :md="7" class="col">
                 <v-container class="d-flex justify-center align-center flex-column text-center px-md-16" style="height: 100%">
-                    <span class="red--text font-weight-bold display-2">
+                    <span :class="[(logging ? 'primary' : 'red') + '--text', 'font-weight-bold', 'display-2']">
                         {{logging ? "Logging into app" : "Create free account"}}
                     </span>
 
@@ -63,7 +63,6 @@
                         flat
                         class="px-md-16"
                         style="width: 100%"
-                        hint="Adres email"
                         color="white"
                         type="email"
                         v-model="credentials.email"
@@ -155,6 +154,7 @@ export default class Auth extends Vue {
     onLoggingChanged() {
         this.errors = {};
         this.message = "";
+
     }
 
     @Watch('loading')
@@ -192,7 +192,11 @@ export default class Auth extends Vue {
 <style lang="scss">
 .auth {
     height: 100%;
+    position: relative;
 
+    * {
+        transition: 750ms cubic-bezier( 0.03, 0.06, 0.08, 0.95 );
+    }
     .row {
         height: 100%;
 
