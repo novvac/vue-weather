@@ -4,6 +4,8 @@
     <div v-else class="d-flex justify-center align-center" style="height: 100%">
       <v-progress-circular indeterminate size="128" width="2"></v-progress-circular>
     </div>
+
+    {{authenticated}}
   </v-app>
 </template>
 
@@ -18,15 +20,21 @@ export default Vue.extend({
       loading: true,
     }
   },
+  computed: {
+    authenticated() {
+      return store.state;
+    }
+  },
   created() {
-    if(store.state.isAuthenticated === undefined) {
+    if(store.state.isAuthenticated === null) {
       this.$http.get("/api/user/")
         .then(res => {
-          console.log(res);
+          store.dispatch("SET_AUTHENTICATED", true);
+          store.dispatch("SET_USER", res.data);
           this.loading = false;
         })
         .catch(err => {
-          console.log(err.response);
+          store.dispatch("SET_AUTHENTICATED", false);
           this.loading = false;
         })
     } else {

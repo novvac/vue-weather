@@ -9,6 +9,7 @@ import passport from './config/passport.js';
 
 // routing
 import auth from './routes/auth.routing.js';
+import user from './routes/user.routing.js';
 
 const PORT = process.env.PORT || 8081;
 const app = express();
@@ -30,6 +31,7 @@ app.use(passport.initialize());
 
 // api
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/user", user);
 
 app.listen(PORT, () => {
     console.log('Server', 'Development server is running!');
