@@ -112,7 +112,7 @@
                         </template>
 
                         <template v-slot:item.weather_icon="{ item }">
-                            <v-img :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="42" class="mx-auto"/>
+                            <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="42" class="mx-auto"/>
                         </template>
                     </v-data-table>
                 </base-card>
@@ -124,6 +124,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import * as i18nIsoCountries from 'i18n-iso-countries';
+i18nIsoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 import CityCard from '../accessed/CityCard.vue';
 
@@ -184,7 +186,7 @@ export default class Main extends Vue {
                 let list = res.data.list;
                 list.map(el => {
                     el.main.temp = (parseFloat(el.main.temp) - 273.15).toFixed(1);
-                    console.log(el);
+                    el.sys.country = i18nIsoCountries.getName(el.sys.country, "en", {select: "official"});
                     return el;
                 })
                 this.search.items = list;
