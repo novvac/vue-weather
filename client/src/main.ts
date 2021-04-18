@@ -6,9 +6,14 @@ import vuetify from './plugins/vuetify'
 import './components/base/index';
 import VueParticles from 'vue-particles';
 import { axiosInstance } from './config/axios';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 Vue.config.productionTip = false
 Vue.use(VueParticles);
+Vue.use(VueToast, {
+  position: 'top-right'
+});
 
 Vue.prototype.$http = axiosInstance;
 
