@@ -19,7 +19,6 @@
 
             <div class="mt-10 mb-12 display-1">
                 Weather <b>Forecast</b>
-                {{model}}
             </div>
 
             <v-row class="ma-0" no-gutters>
@@ -35,7 +34,8 @@
                         >
                             <city-card
                                 :city="item"
-                                :class="['mr-8', 'ml-2']"
+                                :class="['mr-8', 'ml-2', item.id === activeCity ? 'active' : undefined]"
+                                @click="setActiveCity(item.id)"
                             />
                         </v-slide-item>
                     </v-slide-group>
@@ -197,7 +197,11 @@ export default class Main extends Vue {
     ];
 
     get cities() {
-        return store.getters.getCities;
+        return store.getters.cities;
+    }
+
+    get activeCity() {
+        return store.getters.activeCity;
     }
 
     @Watch('search.loading')
@@ -251,6 +255,10 @@ export default class Main extends Vue {
                 selected: [],
             }
         })
+    }
+
+    setActiveCity(id) {
+        store.dispatch("SET_ACTIVE_CITY", id);
     }
 }
 </script>

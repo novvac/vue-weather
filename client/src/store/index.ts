@@ -10,13 +10,17 @@ export default new Vuex.Store({
     user: {
       cities: [],
     },
+    activeCity: null,
   },
   getters: {
     isAuthenticated(state) {
       return state.isAuthenticated;
     },
-    getCities(state) {
+    cities(state) {
       return state.user.cities;
+    },
+    activeCity(state) {
+      return state.activeCity;
     }
   },
   mutations: {
@@ -28,6 +32,9 @@ export default new Vuex.Store({
     },
     setCities(state, payload) {
       state.user.cities = payload;
+    },
+    setActiveCity(state, id) {
+      state.activeCity = id;
     }
   },
   actions: {
@@ -35,11 +42,17 @@ export default new Vuex.Store({
       if(payload) {
         commit("setUser", payload);
         commit("setAuthenticated", true);
+
+        if(payload.cities.length > 0)
+          commit("setActiveCity", payload.cities[0].id)
       } else {
         return axiosInstance.get("/api/user/")
           .then(res => {
             commit("setAuthenticated", true);
             commit("setUser", res.data);
+
+            if(payload.cities.length > 0)
+              commit("setActiveCity", payload.cities[0].id)
           })
           .catch(err => {
             commit("setAuthenticated", false);
@@ -67,6 +80,9 @@ export default new Vuex.Store({
           Vue.$toast.info("This city is already added!");
         }
       })
+    },
+    SET_ACTIVE_CITY({commit}, id) {
+      commit("setActiveCity", id);
     }
   },
   modules: {

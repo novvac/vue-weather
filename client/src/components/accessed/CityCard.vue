@@ -5,6 +5,7 @@
         class="city-card text-center"
         flat
         color="transparent"
+        v-on="$listeners"
     >
         <div class="image" :style="{background: 'url(' + city.img + ')', height: 'calc(100% - 36px)'}"/>
         
