@@ -111,8 +111,6 @@
                     >
                         {{logging ? "Sign in" : "Sign up"}}
                     </base-button>
-
-                    <p class="mt-3 caption font-weight-bold success--text" v-if="message.length > 0">{{message}}</p>
                 </v-container>
             </v-col>
         </v-row>
@@ -134,7 +132,6 @@ export default class Auth extends Vue {
         repassword: "",
     };
     credentialsComplete = false;
-    message = "";
 
     @Watch('credentials', {deep: true})
     @Watch('logging')
@@ -154,8 +151,6 @@ export default class Auth extends Vue {
     @Watch('logging')
     onLoggingChanged() {
         this.errors = {};
-        this.message = "";
-
     }
 
     @Watch('loading')
@@ -180,7 +175,7 @@ export default class Auth extends Vue {
                     store.dispatch("SET_USER", res.data);
                     this.$router.push("/");
                 } else {
-                    this.message = "Success! Account was created!";
+                    this.$toast.success("Account was created!");
                 }
             })
             .catch(err => {

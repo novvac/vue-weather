@@ -6,7 +6,7 @@
         flat
         color="transparent"
     >
-        <div class="image" :style="{background: 'url(' + city.src + ')', height: 'calc(100% - 36px)'}"/>
+        <div class="image" :style="{background: 'url(' + city.img + ')', height: 'calc(100% - 36px)'}"/>
         
         <p class="mt-3 text-center" :style="{bottom: 0, width: '100%'}">
             {{city.city}}, {{city.country}}

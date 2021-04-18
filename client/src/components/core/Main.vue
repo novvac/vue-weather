@@ -24,7 +24,7 @@
             <v-row class="ma-0 cities">
                 <city-card
                     v-for="item in cities"
-                    :key="item.city"
+                    :key="item.id"
                     :city="item"
                     class="mr-12 d-block"
                 />
@@ -167,18 +167,6 @@ export default class Main extends Vue {
         {text: "Lon", sortable: false, align: "center", value: 'coord.lon'},
         {text: "Actions", sortable: false, align: "center", value: 'actions'},
     ];
-    cities = [
-        {
-            src: "https://i.pinimg.com/originals/21/eb/1f/21eb1f1de25367847e8b41a9149db65a.jpg",
-            city: "Paris",
-            country: "France"
-        },
-        {
-            src: "https://upload.wikimedia.org/wikipedia/commons/8/82/London_Big_Ben_Phone_box.jpg",
-            city: "London",
-            country: "UK"
-        },
-    ];
     activePeriod = 0;
     periods =  [
         {
@@ -192,6 +180,10 @@ export default class Main extends Vue {
         },
     ];
 
+    get cities() {
+        return store.getters.getCities;
+    }
+
     @Watch('search.loading')
     onSearchDialogChanged(val: boolean) {
         if(val) {
@@ -202,6 +194,7 @@ export default class Main extends Vue {
     changePeriod(index) {
         this.activePeriod = index;
     }
+
     searchPlace() {
         this.search.dialog = true;
         this.search.loading = true;
@@ -224,8 +217,12 @@ export default class Main extends Vue {
     }
 
     addCity() {
+        const obj = this.search.selected[0];
+
+        if(obj.sys.country.length > 8)
+            obj.sys.country
         this.search.loading = true;
-        store.dispatch("ADD_CITY", this.search.selected[0].id).then(() => {
+        store.dispatch("ADD_CITY", {id: obj.id, city: obj.name, country: obj.sys.country}).then(() => {
             this.search = {
                 value: "",
                 dialog: false,
