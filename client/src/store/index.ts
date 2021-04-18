@@ -61,6 +61,11 @@ export default new Vuex.Store({
           country: payload.country, 
           img: "https://images.unsplash.com/photo-1618542314664-c078e8463ed3?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1080&ixid=MnwxfDB8MXxyYW5kb218fHx8fHx8fHwxNjE4NzUxNzcz&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=720"
         }])
+        Vue.$toast.success(payload.city + " was added to watched!");
+      }).catch(err => {
+        if(err.response && err.response.status === 304) {
+          Vue.$toast.info("This city is already added!");
+        }
       })
     }
   },

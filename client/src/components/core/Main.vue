@@ -235,7 +235,6 @@ export default class Main extends Vue {
                 items: [],
                 selected: [],
             }
-            this.$toast.success('The city was added to watched!');
         })
     }
 }
