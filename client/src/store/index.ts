@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios';
+import { axiosInstance } from '../config/axios';
 
 Vue.use(Vuex)
 
@@ -28,7 +28,7 @@ export default new Vuex.Store({
         commit("setUser", payload);
         commit("setAuthenticated", true);
       } else {
-        return axios.get("/api/user/")
+        return axiosInstance.get("/api/user/")
         .then(res => {
           commit("setAuthenticated", true);
           commit("setUser", res.data);
@@ -39,7 +39,7 @@ export default new Vuex.Store({
       }
     },
     ADD_CITY({commit}, id) {
-      return axios.post("/api/user/city", {id: id})
+      return axiosInstance.post("/api/user/city", {id: id})
         .then(res => {
           console.log(res);
         })

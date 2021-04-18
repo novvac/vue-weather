@@ -27,6 +27,3 @@ router.post("/city", passport.authenticate("jwt", {session: false}), async (req,
 })
 
 export default router;
-
-
-//TODO -> ADD INTERCEPTOR TO AXIOS (401)
