@@ -29,23 +29,24 @@ export default new Vuex.Store({
         commit("setAuthenticated", true);
       } else {
         return axiosInstance.get("/api/user/")
+          .then(res => {
+            commit("setAuthenticated", true);
+            commit("setUser", res.data);
+          })
+          .catch(err => {
+            commit("setAuthenticated", false);
+          })
+      }
+    },
+    LOGOUT({commit}) {
+      return axiosInstance.post("/api/auth/logout")
         .then(res => {
-          commit("setAuthenticated", true);
-          commit("setUser", res.data);
-        })
-        .catch(err => {
+          commit("setUser", {});
           commit("setAuthenticated", false);
         })
-      }
     },
     ADD_CITY({commit}, id) {
       return axiosInstance.post("/api/user/city", {id: id})
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        })
     }
   },
   modules: {

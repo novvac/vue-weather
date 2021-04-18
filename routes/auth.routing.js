@@ -73,4 +73,12 @@ router.post("/login", async (req, res) => {
     }
 })
 
+// @route POST api/auth/logout
+// @desc Logout user
+// @access Public
+router.post("/logout", (req, res) => {
+    res.cookie('token', null, {httpOnly: true, path: '/', maxAge: 0});
+    return res.status(200).json('OK');
+})
+
 export default router;

@@ -233,6 +233,8 @@ export default class Main extends Vue {
                 items: [],
                 selected: [],
             }
+        }).catch(err => {
+            console.log("błąd jest");
         })
     }
 }
