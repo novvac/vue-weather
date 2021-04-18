@@ -139,6 +139,7 @@
 
 <script lang="ts">
 import {Vue, Component, Watch} from 'vue-property-decorator'
+import { cloneDeep } from 'lodash';
 import * as i18nIsoCountries from 'i18n-iso-countries';
 i18nIsoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 import store from '../../store/index';
@@ -217,10 +218,14 @@ export default class Main extends Vue {
     }
 
     addCity() {
-        const obj = this.search.selected[0];
+        const obj = cloneDeep(this.search.selected[0]);
+        let names = i18nIsoCountries.getNames("en", {select: 'official'});
+        
+        if(obj.sys.country.length > 8) {
+            const index = Object.values(names).findIndex(el => {return el === obj.sys.country});
+            obj.sys.country = Object.keys(names)[index];
+        }
 
-        if(obj.sys.country.length > 8)
-            obj.sys.country
         this.search.loading = true;
         store.dispatch("ADD_CITY", {id: obj.id, city: obj.name, country: obj.sys.country}).then(() => {
             this.search = {
