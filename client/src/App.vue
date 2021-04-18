@@ -4,8 +4,6 @@
     <div v-else class="d-flex justify-center align-center" style="height: 100%">
       <v-progress-circular indeterminate size="96" width="1"></v-progress-circular>
     </div>
-
-    {{authenticated}}
   </v-app>
 </template>
 

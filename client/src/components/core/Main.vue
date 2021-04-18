@@ -12,6 +12,8 @@
                     prepend-inner-icon="mdi-magnify"
                     hide-details
                     placeholder="Search new place"
+                    v-model="searchValue"
+                    @keyup.enter="searchPlace()"
                 />
             </v-row>
 
@@ -55,6 +57,12 @@
                     </template> -->
                 </v-simple-table>
             </div>
+
+            <v-dialog v-model="searchDialog" max-width="800" style="border-radius: 32px;">
+                <v-card class="pa-10">
+                    card
+                </v-card>
+            </v-dialog>
         </v-container>
     </v-main>
 </template>
@@ -71,6 +79,8 @@ import CityCard from '../accessed/CityCard.vue';
     }
 })
 export default class Main extends Vue {
+    searchValue = "";
+    searchDialog = true;
     cities = [
         {
             src: "https://i.pinimg.com/originals/21/eb/1f/21eb1f1de25367847e8b41a9149db65a.jpg",
@@ -98,6 +108,15 @@ export default class Main extends Vue {
 
     changePeriod(index) {
         this.activePeriod = index;
+    }
+    searchPlace() {
+        this.$http.get(`https://openweathermap.org/data/2.5/find?&q=${this.searchValue}&type=like&sort=population&cnt=30&appid=439d4b804bc8187953eb36d2a8c26a02&_=${Date.now()}`)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err.response);
+            })
     }
 }
 </script>
