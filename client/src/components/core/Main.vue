@@ -1,5 +1,5 @@
 <template>
-    <v-main class="blue-grey lighten-5">
+    <v-main class="main blue-grey lighten-5">
         <v-container
             fluid
             class="pa-16"
@@ -12,7 +12,7 @@
                     prepend-inner-icon="mdi-magnify"
                     hide-details
                     placeholder="Search new place"
-                    v-model="searchValue"
+                    v-model="search.value"
                     @keyup.enter="searchPlace()"
                 />
             </v-row>
@@ -58,10 +58,46 @@
                 </v-simple-table>
             </div>
 
-            <v-dialog v-model="searchDialog" max-width="800" style="border-radius: 32px;">
-                <v-card class="pa-10">
-                    card
-                </v-card>
+            <v-dialog 
+                v-model="search.dialog" 
+                max-width="800" 
+                persistent
+                content-class="elevation-0"
+            >
+                <base-card class="px-8 py-5" rounded="24">
+                    <v-row class="ma-0" align="center" justify="space-between">
+                        <span class="font-weight-bold body-2">City search</span>
+
+                        <base-button icon @click="search.dialog=false">
+                            <v-icon>mdi-close</v-icon>
+                        </base-button>
+                    </v-row>
+
+                    <v-divider class="mt-2 mb-5"></v-divider>
+
+                    <base-input
+                        class="search-input white mb-5"
+                        solo-inverted
+                        flat
+                        prepend-inner-icon="mdi-magnify"
+                        hide-details
+                        placeholder="Search new place"
+                        v-model="search.value"
+                        @keyup.enter="searchPlace()"
+                    />
+
+                    <div 
+                        v-if="search.loading"
+                        class='d-flex justify-center py-10'
+                    >
+                        <v-progress-circular indeterminate width="1"/>
+                    </div>
+                    <v-data-table
+                        v-else
+                        hide-default-footer
+                        no-data-text="No items were found"
+                    ></v-data-table>
+                </base-card>
             </v-dialog>
         </v-container>
     </v-main>
@@ -79,8 +115,11 @@ import CityCard from '../accessed/CityCard.vue';
     }
 })
 export default class Main extends Vue {
-    searchValue = "";
-    searchDialog = true;
+    search = {
+        value: "",
+        dialog: false,
+        loading: false,
+    }
     cities = [
         {
             src: "https://i.pinimg.com/originals/21/eb/1f/21eb1f1de25367847e8b41a9149db65a.jpg",
@@ -110,12 +149,16 @@ export default class Main extends Vue {
         this.activePeriod = index;
     }
     searchPlace() {
-        this.$http.get(`https://openweathermap.org/data/2.5/find?&q=${this.searchValue}&type=like&sort=population&cnt=30&appid=439d4b804bc8187953eb36d2a8c26a02&_=${Date.now()}`)
+        this.search.dialog = true;
+        this.search.loading = true;
+        this.$http.get(`https://openweathermap.org/data/2.5/find?&q=${this.search.value}&type=like&sort=population&cnt=30&appid=439d4b804bc8187953eb36d2a8c26a02&_=${Date.now()}`)
             .then(res => {
                 console.log(res);
+                this.search.loading = false;
             })
             .catch(err => {
                 console.log(err.response);
+                this.search.loading = false;
             })
     }
 }
