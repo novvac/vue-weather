@@ -224,8 +224,16 @@ export default class Main extends Vue {
     }
 
     addCity() {
-        // dipatch vuex action and add city id to database
-        console.log(this.search.selected[0].id);
+        this.search.loading = true;
+        store.dispatch("ADD_CITY", this.search.selected[0].id).then(() => {
+            this.search = {
+                value: "",
+                dialog: false,
+                loading: false,
+                items: [],
+                selected: [],
+            }
+        })
     }
 }
 </script>

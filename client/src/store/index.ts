@@ -38,6 +38,15 @@ export default new Vuex.Store({
         })
       }
     },
+    ADD_CITY({commit}, id) {
+      return axios.post("/api/user/city", {id: id})
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
   },
   modules: {
   }
