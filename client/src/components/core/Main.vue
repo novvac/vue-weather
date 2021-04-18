@@ -92,29 +92,45 @@
                     >
                         <v-progress-circular indeterminate width="1"/>
                     </div>
-                    <v-data-table
-                        v-else
-                        hide-default-footer
-                        no-data-text="No items were found"
-                        :items="search.items"
-                        :headers="headers"
-                        :single-select="true"
-                        show-select
-                    >
-                        <template v-slot:item.actions="{ item }">
-                            <base-button icon small :href="`https://maps.google.com/?q=${Object.values(item.coord)}&ll=${Object.values(item.coord)}&z=10`" target='_blank'>
-                                <v-icon
-                                    small
-                                >
-                                    mdi-map-marker
-                            </v-icon>
-                            </base-button>
-                        </template>
+                    <div v-else>
+                        <v-data-table
+                            v-model="search.selected"
+                            hide-default-footer
+                            no-data-text="No items were found"
+                            :items="search.items"
+                            :headers="headers"
+                            :single-select="true"
+                            show-select
+                        >
+                            <template v-slot:item.actions="{ item }">
+                                <base-button icon small :href="`https://maps.google.com/?q=${Object.values(item.coord)}&ll=${Object.values(item.coord)}&z=10`" target='_blank'>
+                                    <v-icon
+                                        small
+                                    >
+                                        mdi-map-marker
+                                </v-icon>
+                                </base-button>
+                            </template>
 
-                        <template v-slot:item.weather_icon="{ item }">
-                            <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="42" class="mx-auto"/>
-                        </template>
-                    </v-data-table>
+                            <template v-slot:item.weather_icon="{ item }">
+                                <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="42" class="mx-auto"/>
+                            </template>
+                        </v-data-table>
+
+                        <v-divider></v-divider>
+
+                        <v-row class="ma-0" justify="center">
+                            <base-button
+                                text
+                                class="mt-3"
+                                color="primary"
+                                :disabled="search.selected.length === 0"
+                                @click="addCity()"
+                            >
+                                Save city
+                            </base-button>
+                        </v-row>
+                    </div>
                 </base-card>
             </v-dialog>
         </v-container>
@@ -122,10 +138,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import {Vue, Component, Watch} from 'vue-property-decorator'
 import * as i18nIsoCountries from 'i18n-iso-countries';
 i18nIsoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+import store from '../../store/index';
 
 import CityCard from '../accessed/CityCard.vue';
 
@@ -139,7 +155,8 @@ export default class Main extends Vue {
         value: "",
         dialog: false,
         loading: false,
-        items: []
+        items: [],
+        selected: [],
     }
     headers = [
         {text: "Nazwa", sortable: false, align: "center", value: 'name'},
@@ -175,6 +192,13 @@ export default class Main extends Vue {
         },
     ];
 
+    @Watch('search.loading')
+    onSearchDialogChanged(val: boolean) {
+        if(val) {
+            this.search.selected = [];
+        }
+    }
+
     changePeriod(index) {
         this.activePeriod = index;
     }
@@ -189,6 +213,7 @@ export default class Main extends Vue {
                     el.sys.country = i18nIsoCountries.getName(el.sys.country, "en", {select: "official"});
                     return el;
                 })
+
                 this.search.items = list;
                 this.search.loading = false;
             })
@@ -196,6 +221,11 @@ export default class Main extends Vue {
                 console.log(err.response);
                 this.search.loading = false;
             })
+    }
+
+    addCity() {
+        // dipatch vuex action and add city id to database
+        console.log(this.search.selected[0].id);
     }
 }
 </script>
