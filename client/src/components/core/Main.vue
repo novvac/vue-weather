@@ -2,7 +2,7 @@
     <v-main class="main blue-grey lighten-5">
         <v-container
             fluid
-            class="pa-16"
+            class="pa-4 pa-sm-8 pa-md-16"
         >
             <v-row class="ma-0">
                 <base-input
@@ -19,15 +19,27 @@
 
             <div class="mt-10 mb-12 display-1">
                 Weather <b>Forecast</b>
+                {{model}}
             </div>
 
-            <v-row class="ma-0 cities">
-                <city-card
-                    v-for="item in cities"
-                    :key="item.id"
-                    :city="item"
-                    class="mr-12 d-block"
-                />
+            <v-row class="ma-0" no-gutters>
+                <v-col cols="12" :md="3" :class="['mb-10', 'mb-md-0', 'pr-0', cities.length >= 3 ? 'pr-md-4' : 'pr-md-8', 'pr-lg-0']">
+                    <add-city @click="search.dialog = true"/>
+                </v-col>
+
+                <v-col cols="12" :md="9">
+                    <v-slide-group>
+                        <v-slide-item
+                            v-for="item in cities"
+                            :key="item.id"
+                        >
+                            <city-card
+                                :city="item"
+                                :class="['mr-8', 'ml-2']"
+                            />
+                        </v-slide-item>
+                    </v-slide-group>
+                </v-col>
             </v-row>
 
             <div class="mt-10">
@@ -145,13 +157,16 @@ i18nIsoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 import store from '../../store/index';
 
 import CityCard from '../accessed/CityCard.vue';
+import AddCity from '../accessed/AddCity.vue';
 
 @Component({
     components: {
         CityCard,
+        AddCity,
     }
 })
 export default class Main extends Vue {
+    model = null;
     search = {
         value: "",
         dialog: false,
@@ -245,16 +260,13 @@ export default class Main extends Vue {
     flex: .2 1 auto !important;
 }
 .cities {
-    max-width: calc(100% - 160px - 1rem);
-
-    .city-card {
-        &:last-child {
-            margin-right: 0 !important;
-        }
-    }
+    overflow: hidden;
 }
 .v-data-table td {
     padding: 0 !important;
     border-bottom: 0 !important;
+}
+.col {
+    flex-grow: 0;
 }
 </style>

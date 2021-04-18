@@ -17,6 +17,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 @Component
 export default class BaseCard extends Vue {
     @Prop({default: 16}) readonly rounded: number
-    @Prop({default: {}}) readonly customStyle: object
+    @Prop({default: () => {}}) readonly customStyle: object
 }
 </script>
