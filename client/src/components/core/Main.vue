@@ -60,7 +60,7 @@
 
             <v-dialog 
                 v-model="search.dialog" 
-                max-width="800" 
+                max-width="1200" 
                 persistent
                 content-class="elevation-0"
             >
@@ -96,7 +96,25 @@
                         v-else
                         hide-default-footer
                         no-data-text="No items were found"
-                    ></v-data-table>
+                        :items="search.items"
+                        :headers="headers"
+                        :single-select="true"
+                        show-select
+                    >
+                        <template v-slot:item.actions="{ item }">
+                            <base-button icon small :href="`https://maps.google.com/?q=${Object.values(item.coord)}&ll=${Object.values(item.coord)}&z=10`" target='_blank'>
+                                <v-icon
+                                    small
+                                >
+                                    mdi-map-marker
+                            </v-icon>
+                            </base-button>
+                        </template>
+
+                        <template v-slot:item.weather_icon="{ item }">
+                            <v-img :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="42" class="mx-auto"/>
+                        </template>
+                    </v-data-table>
                 </base-card>
             </v-dialog>
         </v-container>
@@ -119,7 +137,17 @@ export default class Main extends Vue {
         value: "",
         dialog: false,
         loading: false,
+        items: []
     }
+    headers = [
+        {text: "Nazwa", sortable: false, align: "center", value: 'name'},
+        {text: "Weather", sortable: false, align: "center", value: 'weather_icon'},
+        {text: "Country", sortable: false, align: "center", value: 'sys.country'},
+        {text: "Temp (C°)", sortable: false, align: "center", value: 'main.temp'},
+        {text: "Lat", sortable: false, align: "center", value: 'coord.lat'},
+        {text: "Lon", sortable: false, align: "center", value: 'coord.lon'},
+        {text: "Actions", sortable: false, align: "center", value: 'actions'},
+    ];
     cities = [
         {
             src: "https://i.pinimg.com/originals/21/eb/1f/21eb1f1de25367847e8b41a9149db65a.jpg",
@@ -153,7 +181,13 @@ export default class Main extends Vue {
         this.search.loading = true;
         this.$http.get(`https://openweathermap.org/data/2.5/find?&q=${this.search.value}&type=like&sort=population&cnt=30&appid=439d4b804bc8187953eb36d2a8c26a02&_=${Date.now()}`)
             .then(res => {
-                console.log(res);
+                let list = res.data.list;
+                list.map(el => {
+                    el.main.temp = (parseFloat(el.main.temp) - 273.15).toFixed(1);
+                    console.log(el);
+                    return el;
+                })
+                this.search.items = list;
                 this.search.loading = false;
             })
             .catch(err => {
