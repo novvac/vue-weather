@@ -51,7 +51,10 @@ export default class CityCard extends Vue {
     width = 196
 
     removeCity() {
-        store.dispatch("REMOVE_CITY", this.city.id);
+        this.loading = true;
+        store.dispatch("REMOVE_CITY", this.city.id).then(() => {
+            this.loading = false;
+        });
     }
     updateImage() {
         this.loading = true;

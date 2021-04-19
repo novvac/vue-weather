@@ -47,8 +47,45 @@
         </div>
         <div class="ma-6 my-16" v-else>
             <v-row class="ma-0" justify="center" align="center">
-                <v-img :title="item.current.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.current.weather[0].icon}@4x.png`" width="56"/>
+                <v-img :title="item.current.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.current.weather[0].icon}@4x.png`" width="72"/>
+            
+                <div class="text-center ml-2">
+                    <span class="display-1 d-block">Today</span>
+                    <span class="d-block body-2 mt-1">
+                        {{date}}
+                    </span>
+                </div>
             </v-row>
+
+            <div class="d-flex justify-center" style="color: #ddd; font-size: 8rem; font-weight: 100;">
+                {{item.current.temp.toFixed(1)}}
+                <span class="text-h3 mt-10" style="color: #aaa">°C</span>
+            </div>
+
+            <p class="body-1 text-center">
+                {{cities[activeCity].city}}, {{cities[activeCity].country}}
+            </p>
+
+            <div class="text-center body-2">
+                <span class="mx-3">
+                    Feels like <b>{{item.current.feels_like.toFixed(1)}}</b>
+                </span>
+                <span class="mr-2 ml-6">
+                    <v-icon class="mr-1" color='white'>mdi-weather-sunset-up</v-icon> {{time(item.current.sunrise * 1000)}}
+                </span>
+                <span class="ml-2">
+                    <v-icon class="mr1" color="white">mdi-weather-sunset-down</v-icon> {{time(item.current.sunset * 1000)}}
+                </span>
+            </div>
+            <div class="text-center body-2 mt-2">
+                <span class="mx-3">
+                    <v-icon class="mr-1" color="white">mdi-weight</v-icon> {{item.current.pressure}} hPa
+                </span>
+
+                <span class="mx-3">
+                    <v-icon class="mr-1" color="white">mdi-weather-windy</v-icon> {{item.current.wind_speed.toFixed(1)}} m/s
+                </span>
+            </div>
         </div>
     </v-navigation-drawer>
 </template>
@@ -57,6 +94,9 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import store from '../../store/index';
+
+const WEEK_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
 
 @Component
 export default class Drawer extends Vue {
@@ -68,6 +108,14 @@ export default class Drawer extends Vue {
     get item() {
         return this.weatherData[this.activeCity];
     }
+    get date() {
+        let dt = new Date(this.item.current.dt * 1000);
+        return `${WEEK_DAYS[dt.getDay()]}, ${dt.getDate()} ${MONTHS[dt.getMonth()]}`
+    }
+    time(dt) {
+        let date = new Date(dt);
+        return `${date.getHours()}:${date.getMinutes()}`;
+    } 
 
     buttons = [
         {
