@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { axiosInstance } from '../config/axios';
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     activeCity: undefined,
     weatherData: [],
     interval: null,
+    handyLoader: false
   },
   getters: {
     isAuthenticated(state) {
@@ -46,6 +48,9 @@ export default new Vuex.Store({
     },
     setWeatherData(state, payload) {
       state.weatherData = payload;
+    },
+    setHandyLoader(state, val) {
+      state.handyLoader = val;
     }
   },
   actions: {
@@ -107,6 +112,7 @@ export default new Vuex.Store({
       commit("setActiveCity", id);
     },
     UPDATE_WEATHER({commit, dispatch, state}) {
+      commit("setHandyLoader", true);
       if(state.interval) {
         clearInterval(state.interval);
       }
@@ -114,11 +120,26 @@ export default new Vuex.Store({
         dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
       }, 60000);
 
-      let obj = [];
-      for(let city of state.user.cities) {
-        obj.push(city.id);
+      function cityWeather(city) {
+        return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&exclude=current,hourly,minutely&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
       }
-      commit("setWeatherData", obj);
+
+      let requests = [];
+      for(let i=0; i<state.user.cities.length; i++) {
+        requests.push(cityWeather(state.user.cities[i]));
+      }
+
+      console.log(requests);
+
+      axios.all(requests).then(res => {
+        commit("setHandyLoader", false);
+        let obj = res.map(el => {
+          return el.data;
+        });
+        commit("setWeatherData", obj);
+      }).catch(err => {
+        console.log(err.response);
+      })
     }
   },
   modules: {
