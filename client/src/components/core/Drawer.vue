@@ -3,7 +3,7 @@
         app
         right
         width="36%"
-        class="pa-10 drawer"
+        class="pa-10 drawer secondary white--text"
         floating
     >
         <v-row class="ma-6" align="center" justify="space-between">
@@ -12,7 +12,7 @@
                     v-for="(btn, i) in buttons"
                     :key="i"
                     text
-                    class="body-1 text-none mr-3 drawer-option"
+                    class="white--text body-1 text-none mr-3 drawer-option"
                 >
                     {{btn.text}}
 

@@ -17,7 +17,7 @@
                 />
             </v-row>
 
-            <div class="mt-10 mb-12 display-1">
+            <div class="mt-10 mb-12 display-1 primary--text">
                 Weather <b>Forecast</b>
             </div>
 
@@ -52,7 +52,7 @@
                     </base-button>
                 </v-row>
 
-                <week-weather :items="weatherData[activeCity] ? weatherData[activeCity].daily : []"/>``
+                <week-weather :items="weatherData[activeCity] ? weatherData[activeCity].daily : []"/>
             </div>
 
             <v-dialog 

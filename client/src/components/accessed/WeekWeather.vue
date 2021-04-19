@@ -5,6 +5,7 @@
         hide-default-footer
         class="mt-5"
         :loading="items.length === 0"
+        calculate-width
     >
         <template v-slot:item.day="{ item }">
             {{dtToHumanfriendly(items.indexOf(item), item.dt)}}
