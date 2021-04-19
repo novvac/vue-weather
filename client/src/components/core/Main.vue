@@ -21,7 +21,7 @@
                 Weather <b>Forecast</b>
             </div>
 
-            <v-slide-group>
+            <v-slide-group show-arrows>
                 <v-slide-item
                     v-for="item in cities"
                     :key="item.id"
