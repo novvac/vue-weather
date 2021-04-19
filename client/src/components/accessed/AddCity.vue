@@ -2,6 +2,7 @@
     <base-card 
         class="add-city d-flex justify-center align-center flex-column"
         height="256"
+        width="196"
         color="transparent"
         flat
         :customStyle="{border: '1.32px solid #777 !important', overflow: hidden}"

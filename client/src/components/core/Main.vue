@@ -21,26 +21,22 @@
                 Weather <b>Forecast</b>
             </div>
 
-            <v-row class="ma-0" no-gutters>
-                <v-col cols="12" :md="3" :class="['mb-10', 'mb-md-0', 'pr-0', cities.length >= 3 ? 'pr-md-4' : 'pr-md-8', 'pr-lg-0']">
-                    <add-city @click="search.dialog = true"/>
-                </v-col>
+            <v-slide-group>
+                <v-slide-item
+                    v-for="item in cities"
+                    :key="item.id"
+                >
+                    <city-card
+                        :city="item"
+                        :class="['mr-8', 'ml-2', item.id === parseInt(activeCity) ? 'active' : undefined]"
+                        @click="setActiveCity(item.id)"
+                    />
+                </v-slide-item>
 
-                <v-col cols="12" :md="9">
-                    <v-slide-group>
-                        <v-slide-item
-                            v-for="item in cities"
-                            :key="item.id"
-                        >
-                            <city-card
-                                :city="item"
-                                :class="['mr-8', 'ml-2', item.id === activeCity ? 'active' : undefined]"
-                                @click="setActiveCity(item.id)"
-                            />
-                        </v-slide-item>
-                    </v-slide-group>
-                </v-col>
-            </v-row>
+                <v-slide-item>
+                    <add-city @click="search.dialog = true"/>
+                </v-slide-item>
+            </v-slide-group>
 
             <div class="mt-10">
                 <v-row class="ma-0">
@@ -273,8 +269,5 @@ export default class Main extends Vue {
 .v-data-table td {
     padding: 0 !important;
     border-bottom: 0 !important;
-}
-.col {
-    flex-grow: 0;
 }
 </style>

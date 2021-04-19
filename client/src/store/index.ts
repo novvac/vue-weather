@@ -10,7 +10,7 @@ export default new Vuex.Store({
     user: {
       cities: [],
     },
-    activeCity: null,
+    activeCity: undefined,
   },
   getters: {
     isAuthenticated(state) {
@@ -34,7 +34,10 @@ export default new Vuex.Store({
       state.user.cities = payload;
     },
     setActiveCity(state, id) {
-      state.activeCity = id;
+      if(localStorage.getItem("active-city"))
+        state.activeCity = localStorage.getItem("active-city");
+      else
+        state.activeCity = id;
     }
   },
   actions: {
@@ -51,17 +54,19 @@ export default new Vuex.Store({
             commit("setAuthenticated", true);
             commit("setUser", res.data);
 
-            if(payload.cities.length > 0)
-              commit("setActiveCity", payload.cities[0].id)
+            if(res.data.cities.length > 0)
+              commit("setActiveCity", res.data.cities[0].id)
           })
           .catch(err => {
-            commit("setAuthenticated", false);
+            if(err.response && err.reponse.status !== 304)
+              commit("setAuthenticated", false);
           })
       }
     },
     LOGOUT({commit}) {
       return axiosInstance.post("/api/auth/logout")
         .then(res => {
+          localStorage.clear();
           commit("setUser", {});
           commit("setAuthenticated", false);
         })
@@ -82,6 +87,7 @@ export default new Vuex.Store({
       })
     },
     SET_ACTIVE_CITY({commit}, id) {
+      localStorage.setItem("active-city", id);
       commit("setActiveCity", id);
     }
   },
