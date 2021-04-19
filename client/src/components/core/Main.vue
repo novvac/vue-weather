@@ -64,6 +64,8 @@
                         </tbody>
                     </template> -->
                 </v-simple-table>
+
+                {{weatherData}}
             </div>
 
             <v-dialog 
@@ -200,6 +202,10 @@ export default class Main extends Vue {
         return store.getters.activeCity;
     }
 
+    get weatherData() {
+        return store.getters.weatherData;
+    }
+
     @Watch('search.loading')
     onSearchDialogChanged(val: boolean) {
         if(val) {
@@ -242,7 +248,13 @@ export default class Main extends Vue {
         }
 
         this.search.loading = true;
-        store.dispatch("ADD_CITY", {id: obj.id, city: obj.name, country: obj.sys.country}).then(() => {
+
+        store.dispatch("ADD_CITY", {
+            id: obj.id, 
+            city: obj.name, 
+            country: obj.sys.country,
+            coord: obj.coord
+        }).then(() => {
             this.search = {
                 value: "",
                 dialog: false,
