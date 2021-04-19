@@ -139,7 +139,7 @@ export default new Vuex.Store({
         // }, 60000);
 
         function cityWeather(city : object) {
-          return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&exclude=current,hourly,minutely&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
+          return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
         }
   
         let requests = [];

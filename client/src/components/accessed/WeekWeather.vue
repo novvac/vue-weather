@@ -3,12 +3,14 @@
         :headers="headers"
         :items="items"
         hide-default-footer
-        class="mt-5"
-        :loading="items.length === 0"
-        calculate-width
+        hide-default-header
+        class="mt-5 week-table"
+        :loading="items.length === 0"   
     >
         <template v-slot:item.day="{ item }">
-            {{dtToHumanfriendly(items.indexOf(item), item.dt)}}
+            <span :style="{fontWeight: items.indexOf(item) === 0 ? '900' : '400'}">
+                {{dtToHumanfriendly(items.indexOf(item), item.dt)}}
+            </span>
         </template>
 
         <template v-slot:item.humidity="{ item }">
@@ -20,7 +22,31 @@
         </template>
 
         <template v-slot:item.weather_icon="{ item }">
-            <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="48" class="mx-auto"/>
+            <v-img class="d-inline-block" :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="56"/>
+        </template>
+
+        <template v-slot:item.temp="{ item }">
+            <div class="d-flex justify-space-between align-center mb-1" style="width: 100%">
+                <span class="d-block" style="font-weight: 500"><v-icon small>mdi-weather-sunny</v-icon> {{item.temp.day.toFixed(1)}}°</span>
+                <span class="d-block" style="font-weight: 500"><v-icon small>mdi-weather-night</v-icon> {{item.temp.night.toFixed(1)}}°</span>
+            </div>
+            <div class="d-flex">
+                <v-progress-linear
+                    :buffer-value="(100*item.temp.day)/50"
+                    :value="(100*item.temp.day)/50"
+                    stream
+                    color="red"
+                    style="width: 50%"
+                    reverse
+                ></v-progress-linear>
+                <v-progress-linear
+                    :buffer-value="(100*item.temp.night)/50"
+                    :value="(100*item.temp.night)/50"
+                    stream
+                    :color="primary"
+                    style="width: 50%"
+                />
+            </div>
         </template>
     </v-data-table>
 </template>
@@ -43,11 +69,16 @@ export default class WeekWeather extends Vue {
 
     WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     headers = [
-        {text: "Day", align: "center", value: "day"},
-        {text: "Humidity", align: "center", value: "humidity"},
-        {text: "Weather", sortable: false, align: "center", value: "weather_icon"},
-        {text: "Day (C°)", align: "center", value: "temp.day"},
-        {text: "Night (C°)", align: "center", value: "temp.night"},
+        {value: "day"},
+        {align: 'left', value: "humidity"},
+        {align: 'left', value: "weather_icon"},
+        {align: "center", value: "temp"}
     ]
 }
 </script>
+
+<style lang="scss">
+.theme--light.week-table {
+    background: transparent !important;
+}
+</style>
