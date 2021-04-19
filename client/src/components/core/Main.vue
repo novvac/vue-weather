@@ -38,7 +38,7 @@
                 </v-slide-item>
             </v-slide-group>
 
-            <div class="mt-10">
+            <div class="mt-10" v-if="cities.length > 0">
                 <v-row class="ma-0">
                     <base-button
                         v-for="(item, i) in periods"
@@ -52,20 +52,7 @@
                     </base-button>
                 </v-row>
 
-                <v-simple-table class="transparent mt-3">
-                    <!-- <template v-slot:default>
-                        <tbody>
-                            <tr
-                                v-for="(row) in dataset.daily"
-                                :key="row.dt"
-                            >
-                                <td>data row</td>
-                            </tr>
-                        </tbody>
-                    </template> -->
-                </v-simple-table>
-
-                {{weatherData[activeCity]}}
+                <week-weather :items="weatherData[activeCity] ? weatherData[activeCity].daily : []"/>``
             </div>
 
             <v-dialog 
@@ -156,11 +143,13 @@ import store from '../../store/index';
 
 import CityCard from '../accessed/CityCard.vue';
 import AddCity from '../accessed/AddCity.vue';
+import WeekWeather from '../accessed/WeekWeather.vue';
 
 @Component({
     components: {
         CityCard,
         AddCity,
+        WeekWeather,
     }
 })
 export default class Main extends Vue {
