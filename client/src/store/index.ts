@@ -136,7 +136,10 @@ export default new Vuex.Store({
         let citiesRef = state.user.cities;
         citiesRef.splice(citiesIds.indexOf(id), 1);
         
-      commit("setHandyLoader", false);
+        commit("setHandyLoader", false);
+        Vue.$toast.success("City was removed from watched!");
+      }).catch(err => {
+        Vue.$toast.error("Something went wrong!");
       })
     },
     SET_ACTIVE_CITY({commit}, index) {
