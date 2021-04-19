@@ -7,7 +7,7 @@
         color="transparent"
         v-on="$listeners"
     >
-        <div class="image" :style="{background: 'url(' + city.img + ')', height: 'calc(100% - 36px)'}"/>
+        <div class="image" :style="{background: 'url(' + (customImg ? customImg : city.img) + ')', height: 'calc(100% - 36px)'}"/>
         
         <p class="mt-3 text-center text-truncate" :style="{bottom: 0, width: '100%'}">
             <span>{{city.city}}</span><span id="comma">,</span> <span>{{city.country}}</span>
@@ -18,6 +18,7 @@
             class="error"
             style="right: 0;"
             @click.stop="removeCity()"
+            :disabled="loading"
         >
             <v-icon color="white">mdi-close</v-icon>
         </base-button>
@@ -27,31 +28,45 @@
             class="blue"
             style="left: 0;"
             @click.stop="updateImage()"
+            :disabled="loading"
         >
             <v-icon color="white">mdi-camera</v-icon>
         </base-button>
+
     </v-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import store from '../../store/index';
+import { axiosInstance } from '../../config/axios';
 
 @Component
 export default class CityCard extends Vue {
     @Prop(Object) readonly city: object | undefined
 
+    customImg = null;
+    loading = false;
     height = 256
     width = 196
 
     removeCity() {
-        store.dispatch("REMOVE_CITY", this.city.id).then(() => {
-            console.log("Usunięto!");
-        })
+        store.dispatch("REMOVE_CITY", this.city.id);
     }
-
     updateImage() {
-
+        this.loading = true;
+        store.dispatch("SET_HANDY_LOADER", true);
+        axiosInstance.get("https://source.unsplash.com/1024x1280/?city,village").then(res => {
+            this.customImg = res.request.responseURL;
+            
+            store.dispatch("UPDATE_CITY", {id: this.city.id, data: {img: this.customImg}}).then(() => {
+                this.loading = false;
+            })
+        }).catch(() => {
+            this.$toast.error("Connection error! Try refresh the page!");
+            this.loading = false;
+            store.dispatch("SET_HANDY_LOADER", false);
+        })
     }
 }
 </script>

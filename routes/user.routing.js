@@ -31,7 +31,7 @@ router.post("/city", passport.authenticate("jwt", {session: false}), async (req,
             id: req.body.id,
             city: req.body.city,
             country: req.body.country,
-            img: "https://images.unsplash.com/photo-1618542314664-c078e8463ed3?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1080&ixid=MnwxfDB8MXxyYW5kb218fHx8fHx8fHwxNjE4NzUxNzcz&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=720",
+            img: "https://source.unsplash.com/1080x1920/?city,village",
             coord: req.body.coord,
         });
         await user.save();
@@ -52,6 +52,19 @@ router.delete('/city/:id', passport.authenticate("jwt", {session: false}), async
     await user.save();
 
     return res.status(200).json("City deleted");
+})
+
+// @route PUT api/user/city/:id
+// @desc Update city
+// @access Authenticated users
+router.put('/city/:id', passport.authenticate("jwt", {session: false}), async (req, res) => {
+    let { cities } = req.user;
+    const index = cities.map(el => el.id).indexOf(req.params.id);
+    cities[index].img = req.body.img;
+
+    await User.findOneAndUpdate({_id: req.user.id}, {cities}, {useFindAndModify: false});
+
+    return res.status(200).json("City updated");
 })
 
 export default router;

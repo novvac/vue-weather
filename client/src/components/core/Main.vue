@@ -199,12 +199,6 @@ export default class Main extends Vue {
         {
             text: "Week"
         },
-        {
-            text: "Month"
-        },
-        {
-            text: "3 month"
-        },
     ];
 
     get drawer() {

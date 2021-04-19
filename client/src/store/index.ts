@@ -147,6 +147,12 @@ export default new Vuex.Store({
         Vue.$toast.error("Something went wrong!");
       })
     },
+    UPDATE_CITY({commit}, payload) {
+      commit("setHandyLoader", true);
+      return axiosInstance.put("/api/user/city/" + payload.id, payload.data).then(() => {
+        commit("setHandyLoader", false);
+      })
+    },
     SET_ACTIVE_CITY({commit}, index) {
       localStorage.setItem("active-city", index);
       commit("setActiveCity", index);
@@ -183,6 +189,9 @@ export default new Vuex.Store({
     },
     TOGGLE_DRAWER({commit}, val) {
       commit('toggleDrawer', val);
+    },
+    SET_HANDY_LOADER({commit}, val) {
+      commit('setHandyLoader', val);
     }
   },
   modules: {
