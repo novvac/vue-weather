@@ -32,7 +32,7 @@
             </div>
             <div class="d-flex">
                 <v-progress-linear
-                    :buffer-value="(100*item.temp.day)/50"
+                    :buffer-value="(100*item.temp.day)/50 * -1"
                     :value="(100*item.temp.day)/50"
                     stream
                     color="red"
@@ -40,7 +40,7 @@
                     reverse
                 ></v-progress-linear>
                 <v-progress-linear
-                    :buffer-value="(100*item.temp.night)/50"
+                    :buffer-value="(100*item.temp.night)/50 * -1"
                     :value="(100*item.temp.night)/50"
                     stream
                     :color="primary"
