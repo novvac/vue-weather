@@ -5,7 +5,7 @@
         width="196"
         color="transparent"
         flat
-        :customStyle="{border: '1.32px solid #777 !important', overflow: hidden}"
+        :customStyle="{border: '1.32px solid #777 !important'}"
         rounded="32"
         v-on="$listeners"
     >

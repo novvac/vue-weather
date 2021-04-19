@@ -4,7 +4,7 @@
       <v-progress-circular size="24" indeterminate width="2"></v-progress-circular>
     </div>
 
-    <router-view v-if="!(authenticated.isAuthenticated === null)"/>
+    <router-view v-if="!(authenticated === null)"/>
     <div v-else class="d-flex justify-center align-center" style="height: 100%">
       <v-progress-circular indeterminate size="96" width="1"></v-progress-circular>
     </div>
@@ -19,12 +19,19 @@ export default Vue.extend({
   name: 'App',
   computed: {
     authenticated() {
-      return store.state;
+      return store.getters.isAuthenticated;
     },
     handyLoader() {
       return store.state.handyLoader;
     }
   },
+  watch: {
+    authenticated(val, oldVal) {
+      if(!val && oldVal) {
+        this.$router.push("/authorization")
+      }
+    }
+  }
 })
 </script>
 

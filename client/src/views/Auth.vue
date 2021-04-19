@@ -1,7 +1,7 @@
 <template>
     <div class="auth">
         <v-row class="ma-0" :style="{flexDirection: 'row' + (logging ? '-reverse' : '')}">
-            <v-col cols="5" :class="[logging ? 'primary' : 'red', 'd-none', 'd-md-block', 'pa-0']" style="position: relative;">
+            <v-col cols="5" :class="[logging ? 'success' : 'red', 'd-none', 'd-md-block', 'pa-0']" style="position: relative;">
                 <vue-particles
                     class="particles"
                     color="#dedede"
@@ -41,7 +41,7 @@
 
             <v-col cols="12" :md="7" class="col">
                 <v-container class="d-flex justify-center align-center flex-column text-center px-md-16" style="height: 100%">
-                    <span :class="[(logging ? 'primary' : 'red') + '--text', 'font-weight-bold', 'display-2']">
+                    <span :class="[(logging ? 'success' : 'red') + '--text', 'font-weight-bold', 'display-2']">
                         {{logging ? "Logging into app" : "Create free account"}}
                     </span>
 

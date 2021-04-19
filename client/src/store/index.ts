@@ -1,3 +1,4 @@
+import router from '@/router';
 import axios from 'axios';
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -116,30 +117,32 @@ export default new Vuex.Store({
       if(state.interval) {
         clearInterval(state.interval);
       }
-      // state.interval = setInterval(() => {    // set 60 seconds cycle...
-      //   dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
-      // }, 60000);
+      if(state.isAuthenticated) {
+        // state.interval = setInterval(() => {    // set 60 seconds cycle...
+        //   dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
+        // }, 60000);
 
-      function cityWeather(city) {
-        return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&exclude=current,hourly,minutely&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
+        function cityWeather(city : object) {
+          return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&exclude=current,hourly,minutely&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
+        }
+  
+        let requests = [];
+        for(let i=0; i<state.user.cities.length; i++) {
+          requests.push(cityWeather(state.user.cities[i]));
+        }
+  
+        console.log(requests);
+  
+        axios.all(requests).then(res => {
+          let obj = res.map(el => {
+            return el.data;
+          });
+          commit("setWeatherData", obj);
+          commit("setHandyLoader", false);
+        }).catch(err => {
+          console.log(err.response);
+        })
       }
-
-      let requests = [];
-      for(let i=0; i<state.user.cities.length; i++) {
-        requests.push(cityWeather(state.user.cities[i]));
-      }
-
-      console.log(requests);
-
-      axios.all(requests).then(res => {
-        let obj = res.map(el => {
-          return el.data;
-        });
-        commit("setWeatherData", obj);
-        commit("setHandyLoader", false);
-      }).catch(err => {
-        console.log(err.response);
-      })
     }
   },
   modules: {

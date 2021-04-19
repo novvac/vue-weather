@@ -13,14 +13,15 @@
                     :key="i"
                     text
                     class="white--text body-1 text-none mr-3 drawer-option"
+                    @click="btn.clickEvent ? btn.clickEvent() : undefined"
                 >
                     {{btn.text}}
 
                     <v-chip 
                         v-if="btn.chip"
-                        x-small
+                        small
                         label
-                        class="ml-3 px-2 error"
+                        class="ml-3 px-2 error caption d-flex justify-center align-center"
                     >
                         {{btn.chip}}
                     </v-chip>
@@ -29,9 +30,8 @@
 
             <v-badge
                 color="red"
-                bordered
-                offset-x="10"
-                offset-y="10"
+                offset-x="8"
+                offset-y="8"
             >
                 <v-avatar
                     rounded
@@ -47,16 +47,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import store from '../../store/index';
 
 @Component
 export default class Drawer extends Vue {
     buttons = [
         {
             text: "Notifications",
-            chip: 0,
+            chip: 1,
         },
         {
-            text: "Places",
+            text: "Logout",
+            clickEvent: function() {store.dispatch("LOGOUT")}
         }
     ]
 }
