@@ -135,8 +135,13 @@ export default new Vuex.Store({
         let citiesIds = state.user.cities.map(el => el.id);
         let citiesRef = state.user.cities;
         citiesRef.splice(citiesIds.indexOf(id), 1);
+
+        if(parseInt(localStorage.getItem("active-city")) >= parseInt(state.user.cities.length)) {
+          state.activeCity = state.user.cities.length - 1;
+        }
         
         commit("setHandyLoader", false);
+        dispatch("UPDATE_WEATHER");
         Vue.$toast.success("City was removed from watched!");
       }).catch(err => {
         Vue.$toast.error("Something went wrong!");
