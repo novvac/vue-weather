@@ -3,11 +3,11 @@
         app
         right
         width="36%"
-        class="pa-10 drawer secondary white--text"
+        class="pa-10 pr-0 drawer secondary white--text"
         floating
         v-model="drawer && cities.length > 0"
     >
-        <v-row class="ma-6" align="center" justify="space-between">
+        <v-row class="ma-6 mr-16" align="center" justify="space-between">
             <div>
                 <base-button
                     v-for="(btn, i) in buttons"
@@ -41,6 +41,15 @@
                 </v-avatar>
             </v-badge>
         </v-row>
+
+        <div class="d-flex justify-center py-16" v-if="!weatherData[activeCity]">
+            <v-progress-circular indeterminate size="64" width="1" class="mx-auto"/>
+        </div>
+        <div class="ma-6 my-16" v-else>
+            <v-row class="ma-0" justify="center" align="center">
+                <v-img :title="item.current.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.current.weather[0].icon}@4x.png`" width="56"/>
+            </v-row>
+        </div>
     </v-navigation-drawer>
 </template>
 
@@ -51,12 +60,13 @@ import store from '../../store/index';
 
 @Component
 export default class Drawer extends Vue {
-    get drawer() {
-        return store.getters.drawer;
-    }
+    get drawer() { return store.getters.drawer }
+    get cities() { return store.getters.cities }
+    get activeCity() { return store.getters.activeCity }
+    get weatherData() { return store.getters.weatherData }
 
-    get cities() {
-        return store.getters.cities;
+    get item() {
+        return this.weatherData[this.activeCity];
     }
 
     buttons = [
@@ -70,10 +80,24 @@ export default class Drawer extends Vue {
 
 <style lang="scss">
 .drawer {
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: rgba(0,0,0,.25);
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,.5);
+    }
+
     .drawer-option {
         &:last-child {
             margin-right: 0 !important;
         }
+    }
+
+    .v-image.v-responsive {
+        flex: 0 0 auto !important;
     }
 
     .v-badge__badge {

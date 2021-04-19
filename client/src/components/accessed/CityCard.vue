@@ -12,11 +12,30 @@
         <p class="mt-3 text-center text-truncate" :style="{bottom: 0, width: '100%'}">
             <span>{{city.city}}</span><span id="comma">,</span> <span>{{city.country}}</span>
         </p>
+
+        <base-button 
+            icon 
+            class="error"
+            style="right: 0;"
+            @click.stop="removeCity()"
+        >
+            <v-icon color="white">mdi-close</v-icon>
+        </base-button>
+
+        <base-button 
+            icon 
+            class="blue"
+            style="left: 0;"
+            @click.stop="updateImage()"
+        >
+            <v-icon color="white">mdi-camera</v-icon>
+        </base-button>
     </v-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import store from '../../store/index';
 
 @Component
 export default class CityCard extends Vue {
@@ -24,6 +43,16 @@ export default class CityCard extends Vue {
 
     height = 256
     width = 196
+
+    removeCity() {
+        store.dispatch("REMOVE_CITY", this.city.id).then(() => {
+            console.log("Usunięto!");
+        })
+    }
+
+    updateImage() {
+
+    }
 }
 </script>
 
@@ -69,6 +98,11 @@ $border-radius: 24px;
             }
         }   
     }
+    &:hover {
+        .v-btn {
+            transform: scale(1);
+        }
+    }
     div.image {
         position: absolute;
         transition: 300ms !important;
@@ -95,6 +129,12 @@ $border-radius: 24px;
         position: absolute;
         margin-bottom: 0;
         transition: 200ms cubic-bezier(.32,.02,0,1.18);
+    }
+    .v-btn {
+        position: absolute;
+        transform: scale(0);
+        opacity: .9;
+        top: 6px;
     }
 }
 </style>

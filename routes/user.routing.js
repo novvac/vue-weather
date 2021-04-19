@@ -42,4 +42,16 @@ router.post("/city", passport.authenticate("jwt", {session: false}), async (req,
     return res.status(200).json('City was added');
 })
 
+// @route DELETE api/user/city/:id
+// @desc Remove city from watched
+// @access Authenticated users
+router.delete('/city/:id', passport.authenticate("jwt", {session: false}), async (req, res) => {
+    let user = await User.findById(req.user.id);
+    user.cities.splice(user.cities.map(el => el.id).indexOf(req.params.id), 1);
+    
+    await user.save();
+
+    return res.status(200).json("City deleted");
+})
+
 export default router;

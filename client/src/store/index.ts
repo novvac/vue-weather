@@ -45,10 +45,15 @@ export default new Vuex.Store({
       state.user.cities = payload;
     },
     setActiveCity(state, index) {
-      if(localStorage.getItem("active-city"))
+      if(localStorage.getItem("active-city")) {
         state.activeCity = localStorage.getItem("active-city");
-      else
+
+        if(parseInt(localStorage.getItem("active-city")) >= parseInt(state.user.cities.length)) {
+          state.activeCity = 0;
+        }
+      } else {
         state.activeCity = index;
+      }
     },
     setWeatherData(state, payload) {
       state.weatherData = payload;
@@ -122,6 +127,16 @@ export default new Vuex.Store({
         if(err.response && err.response.status === 304) {
           Vue.$toast.info("This city is already added!");
         }
+      })
+    },
+    REMOVE_CITY({commit, dispatch, state}, id) {
+      commit("setHandyLoader", true);
+      return axiosInstance.delete("/api/user/city/"+id).then(() => {
+        let citiesIds = state.user.cities.map(el => el.id);
+        let citiesRef = state.user.cities;
+        citiesRef.splice(citiesIds.indexOf(id), 1);
+        
+      commit("setHandyLoader", false);
       })
     },
     SET_ACTIVE_CITY({commit}, index) {

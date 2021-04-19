@@ -38,6 +38,18 @@ export default Vue.extend({
 <style lang="scss">
 html {
   position: relative;
+
+  ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #1f222f;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,.2);
+    }
 }
 .handy-loader {
   position: fixed;
