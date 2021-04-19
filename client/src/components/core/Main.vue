@@ -23,13 +23,13 @@
 
             <v-slide-group show-arrows>
                 <v-slide-item
-                    v-for="item in cities"
+                    v-for="(item, i) in cities"
                     :key="item.id"
                 >
                     <city-card
                         :city="item"
-                        :class="['mr-8', 'ml-2', item.id === parseInt(activeCity) ? 'active' : undefined]"
-                        @click="setActiveCity(item.id)"
+                        :class="['mr-8', 'ml-2', i === parseInt(activeCity) ? 'active' : undefined]"
+                        @click="setActiveCity(i)"
                     />
                 </v-slide-item>
 
@@ -65,7 +65,7 @@
                     </template> -->
                 </v-simple-table>
 
-                {{weatherData}}
+                {{weatherData[activeCity]}}
             </div>
 
             <v-dialog 

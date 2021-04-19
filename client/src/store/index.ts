@@ -40,11 +40,11 @@ export default new Vuex.Store({
     setCities(state, payload) {
       state.user.cities = payload;
     },
-    setActiveCity(state, id) {
+    setActiveCity(state, index) {
       if(localStorage.getItem("active-city"))
         state.activeCity = localStorage.getItem("active-city");
       else
-        state.activeCity = id;
+        state.activeCity = index;
     },
     setWeatherData(state, payload) {
       state.weatherData = payload;
@@ -60,7 +60,7 @@ export default new Vuex.Store({
         commit("setAuthenticated", true);
 
         if(user.cities.length > 0)
-          commit("setActiveCity", user.cities[0].id)
+          commit("setActiveCity", 0)
 
         dispatch("UPDATE_WEATHER");   // first update weather
       }
@@ -98,7 +98,7 @@ export default new Vuex.Store({
         Vue.$toast.success(payload.city + " was added to watched!");
 
         if(state.user.cities.length === 1)
-          dispatch("SET_ACTIVE_CITY", payload.id);
+          dispatch("SET_ACTIVE_CITY", 0);
 
         dispatch("UPDATE_WEATHER");
       }).catch(err => {
@@ -107,18 +107,18 @@ export default new Vuex.Store({
         }
       })
     },
-    SET_ACTIVE_CITY({commit}, id) {
-      localStorage.setItem("active-city", id);
-      commit("setActiveCity", id);
+    SET_ACTIVE_CITY({commit}, index) {
+      localStorage.setItem("active-city", index);
+      commit("setActiveCity", index);
     },
     UPDATE_WEATHER({commit, dispatch, state}) {
       commit("setHandyLoader", true);
       if(state.interval) {
         clearInterval(state.interval);
       }
-      state.interval = setInterval(() => {    // set 60 seconds cycle...
-        dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
-      }, 60000);
+      // state.interval = setInterval(() => {    // set 60 seconds cycle...
+      //   dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
+      // }, 60000);
 
       function cityWeather(city) {
         return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&exclude=current,hourly,minutely&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
@@ -132,11 +132,11 @@ export default new Vuex.Store({
       console.log(requests);
 
       axios.all(requests).then(res => {
-        commit("setHandyLoader", false);
         let obj = res.map(el => {
           return el.data;
         });
         commit("setWeatherData", obj);
+        commit("setHandyLoader", false);
       }).catch(err => {
         console.log(err.response);
       })
