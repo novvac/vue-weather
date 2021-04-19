@@ -5,6 +5,7 @@
         width="36%"
         class="pa-10 drawer secondary white--text"
         floating
+        v-model="drawer && cities.length > 0"
     >
         <v-row class="ma-6" align="center" justify="space-between">
             <div>
@@ -13,7 +14,6 @@
                     :key="i"
                     text
                     class="white--text body-1 text-none mr-3 drawer-option"
-                    @click="btn.clickEvent ? btn.clickEvent() : undefined"
                 >
                     {{btn.text}}
 
@@ -51,15 +51,19 @@ import store from '../../store/index';
 
 @Component
 export default class Drawer extends Vue {
+    get drawer() {
+        return store.getters.drawer;
+    }
+
+    get cities() {
+        return store.getters.cities;
+    }
+
     buttons = [
         {
             text: "Notifications",
             chip: 1,
         },
-        {
-            text: "Logout",
-            clickEvent: function() {store.dispatch("LOGOUT")}
-        }
     ]
 }
 </script>

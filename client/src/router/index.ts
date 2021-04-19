@@ -26,8 +26,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const guards = () => {
-    console.log("GUARD");
-    console.log(store.state);
     if(to.name === "Authorization" && store.getters.isAuthenticated) {
       next({name: "Accessed"});
     } else if(to.name === "Accessed" && !store.getters.isAuthenticated) {

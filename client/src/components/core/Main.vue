@@ -4,7 +4,7 @@
             fluid
             class="pa-4 pa-sm-8 pa-md-16"
         >
-            <v-row class="ma-0">
+            <v-row class="ma-0" justify="space-between" align="center">
                 <base-input
                     class="search-input white"
                     solo
@@ -15,6 +15,27 @@
                     v-model="search.value"
                     @keyup.enter="searchPlace()"
                 />
+
+                <div>
+                    <base-button
+                        large icon 
+                        color="primary" 
+                        @click="logout()"
+                        class="mr-3"
+                    >
+                        <v-icon>mdi-logout</v-icon>
+                    </base-button>
+
+                    <base-button
+                        large icon 
+                        color="primary" 
+                        @click="toggleDrawer()"
+                        :disabled="cities.length === 0"
+                    >
+                        <v-icon v-if="!drawer">mdi-arrow-left</v-icon>
+                        <v-icon v-else>mdi-arrow-right</v-icon>
+                    </base-button>
+                </div>
             </v-row>
 
             <div class="mt-10 mb-12 display-1 primary--text">
@@ -53,6 +74,9 @@
                 </v-row>
 
                 <week-weather :items="weatherData[activeCity] ? weatherData[activeCity].daily : []"/>
+            </div>
+            <div v-else class="text-left mt-10">
+                <b>Nie dodałeś/aś jeszcze żadnego miasta!</b>
             </div>
 
             <v-dialog 
@@ -183,6 +207,10 @@ export default class Main extends Vue {
         },
     ];
 
+    get drawer() {
+        return store.getters.drawer;
+    }
+
     get cities() {
         return store.getters.cities;
     }
@@ -256,6 +284,12 @@ export default class Main extends Vue {
 
     setActiveCity(id) {
         store.dispatch("SET_ACTIVE_CITY", id);
+    }
+    toggleDrawer() {
+        store.dispatch("TOGGLE_DRAWER");
+    }
+    logout() {
+        store.dispatch("LOGOUT");
     }
 }
 </script>

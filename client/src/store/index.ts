@@ -1,4 +1,3 @@
-import router from '@/router';
 import axios from 'axios';
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -15,7 +14,8 @@ export default new Vuex.Store({
     activeCity: undefined,
     weatherData: [],
     interval: null,
-    handyLoader: false
+    handyLoader: false,
+    drawer: false,
   },
   getters: {
     isAuthenticated(state) {
@@ -29,6 +29,9 @@ export default new Vuex.Store({
     },
     weatherData(state) {
       return state.weatherData;
+    },
+    drawer(state) {
+      return state.drawer;
     }
   },
   mutations: {
@@ -52,6 +55,14 @@ export default new Vuex.Store({
     },
     setHandyLoader(state, val) {
       state.handyLoader = val;
+    },
+    toggleDrawer(state, val) {
+      if(val)
+        state.drawer = val;
+      else
+        state.drawer = !state.drawer;
+
+      localStorage.setItem('drawer', state.drawer);
     }
   },
   actions: {
@@ -62,6 +73,9 @@ export default new Vuex.Store({
 
         if(user.cities.length > 0)
           commit("setActiveCity", 0)
+        if(localStorage.getItem("drawer") === "true") {
+          dispatch("TOGGLE_DRAWER", true);
+        }
 
         dispatch("UPDATE_WEATHER");   // first update weather
       }
@@ -98,8 +112,10 @@ export default new Vuex.Store({
         }])
         Vue.$toast.success(payload.city + " was added to watched!");
 
-        if(state.user.cities.length === 1)
+        if(state.user.cities.length === 1) {
           dispatch("SET_ACTIVE_CITY", 0);
+          dispatch("TOGGLE_DRAWER", true);
+        }
 
         dispatch("UPDATE_WEATHER");
       }).catch(err => {
@@ -131,8 +147,6 @@ export default new Vuex.Store({
           requests.push(cityWeather(state.user.cities[i]));
         }
   
-        console.log(requests);
-  
         axios.all(requests).then(res => {
           let obj = res.map(el => {
             return el.data;
@@ -143,6 +157,9 @@ export default new Vuex.Store({
           console.log(err.response);
         })
       }
+    },
+    TOGGLE_DRAWER({commit}, val) {
+      commit('toggleDrawer', val);
     }
   },
   modules: {
