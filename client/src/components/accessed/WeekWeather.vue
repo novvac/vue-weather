@@ -9,7 +9,7 @@
         @click:row="rowClick()"
     >
         <template v-slot:item="{ item }">
-            <tr @click="selectedDay = items.indexOf(item), rowClick(item)">
+            <tr @click="selectedDay = items.indexOf(item), rowClick(item)" class="table-row">
                 <td>
                     <span :style="{fontWeight: items.indexOf(item) === selectedDay ? '900' : '400'}">
                         {{dtToHumanfriendly(items.indexOf(item), item.dt)}}
@@ -96,6 +96,28 @@ tr {
 
     &:hover {
         background: rgba(0,0,0,.1) !important;
+    }
+}
+@media only screen and (max-width: 720px) {
+    .table-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,.1);
+
+        td {
+            width: 33%;
+
+            &:first-child, &:nth-child(2) {
+                display: flex;
+                align-items: center;
+            }
+            &:last-child {
+                width: 100%;    
+            }
+        }
     }
 }
 </style>
