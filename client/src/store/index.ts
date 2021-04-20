@@ -173,9 +173,9 @@ export default new Vuex.Store({
         clearInterval(state.interval);
       }
       if(state.isAuthenticated) {
-        // state.interval = setInterval(() => {    // set 60 seconds cycle...
-        //   dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
-        // }, 60000);
+        state.interval = setInterval(() => {    // set 60 seconds cycle...
+          dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
+        }, 60000);
 
         function cityWeather(city : object) {
           return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
