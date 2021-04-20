@@ -14,9 +14,13 @@
                     placeholder="Search new place"
                     v-model="search.value"
                     @keyup.enter="searchPlace()"
+                    :style="{width: $vuetify.breakpoint.smAndDown ? '100%' : 'auto'}"
                 />
 
-                <div>
+                <div 
+                    class="mt-5 mt-md-0 d-flex justify-space-around align-center"
+                    :style="{width: $vuetify.breakpoint.smAndDown ? '100%' : 'auto'}"
+                >
                     <base-button
                         large icon 
                         color="primary" 
@@ -38,7 +42,7 @@
                 </div>
             </v-row>
 
-            <div class="mt-10 mb-12 display-1 primary--text">
+            <div class="mt-10 mb-12 display-1 primary--text text-center text-md-left">
                 Weather <b>Forecast</b>
             </div>
 

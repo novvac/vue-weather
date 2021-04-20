@@ -2,13 +2,17 @@
     <v-navigation-drawer
         app
         right
-        width="36%"
+        :width="$vuetify.breakpoint.smAndDown ? '100%': '36%'"
+        touchless
         class="pa-10 pr-0 drawer secondary white--text"
         floating
         v-model="drawer && cities.length > 0"
     >
         <v-row class="ma-6 mr-16" align="center" justify="space-between">
-            <v-spacer></v-spacer>
+            <base-button large icon class="d-lg-none" @click="toggleDrawer(false)">
+                <v-icon color="white">mdi-close</v-icon>
+            </base-button>
+            <v-spacer/>
             <v-badge
                 color="red"
                 offset-x="8"
@@ -120,7 +124,7 @@ export default class Drawer extends Vue {
     }
 
     interval = null;
-    item = "dfdsg";
+    item = null;
 
     date(mode) {
         let dt = new Date(this.item.dt * 1000);;
@@ -139,6 +143,9 @@ export default class Drawer extends Vue {
     time(dt) {
         let date = new Date(dt);
         return `${date.getHours()}:${date.getMinutes()}`;
+    }
+    toggleDrawer(value) {
+        store.dispatch('TOGGLE_DRAWER', value);
     }
 }
 </script>
