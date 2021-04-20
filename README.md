@@ -21,18 +21,37 @@ Vue weather uses a number of open source projects to work properly:
 - [Express.js] - fast node.js network app framework
 - [MongoDB] - The noSQL database for modern applications
 
-## Credits
-- https://www.freepik.com
-
 ## Installation
-Install the dependencies and devDependencies and start the server.
+Clone repository and perform the following actions:
 
+**Install dependencies**
 ```sh
 cd vue-weather
-cd client
-npm i
-npm run serve
+npm run install-server
+npm run install-client
 ```
+
+**Edit /config/keys.js by added mongoDb URI:**
+```sh
+export default {
+    mongoURI: "<YOUR MONGODB URI>",
+    secretOrKey: "tAlk1sChEApsh0Wm3thEc0d3"
+}
+```
+
+**Next, start server in one terminal...**
+```sh
+npm run dev-server
+```
+
+**...and start client in another terminal**
+```sh
+npm run dev-client
+```
+
+----
+
+Now, you can go **localhost:8080** and play fun!
 
 ## License
 

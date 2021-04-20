@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev-server": "nodemon index.js",
-    "dev-client": "cd client && npm run serve"
+    "dev-client": "cd client && npm run serve",
+    "install-server": "npm i",
+    "install-client": "cd client && npm i"
   },
   "repository": {
     "type": "git",
