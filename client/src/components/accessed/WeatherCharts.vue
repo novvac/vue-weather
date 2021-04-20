@@ -1,30 +1,76 @@
 <template>
     <div class="mr-16">
-        <p class="mt-16 overline">Precipitation for the next hour</p>
-        <apexchart
-            v-if="weatherData[activeCity]"
-            type="bar" 
-            :options="{
-                ...options,
-                yaxis: {
-                    labels: {
-                        formatter: function (value) {
-                            return `${value.toFixed(2)} mm`;
-                        }
+        <div>
+            <p class="mt-16 overline">Temperature in current week</p>
+            <apexchart
+                type="line" 
+                :options="{
+                    ...options,
+                    yaxis: {
+                        labels: {
+                            formatter: function (value) {
+                                return `${value.toFixed(2)} °C`;
+                            }
+                        },
                     },
-                },
-                xaxis: {
-                    labels: {
-                        show: false,
+                }" 
+                :series="[{
+                    name: 'Dzień',
+                    data: weatherData[activeCity].daily.map(el => el.temp.day.toFixed(2))
+                }, {
+                    name: 'Noc',
+                    data: weatherData[activeCity].daily.map(el => el.temp.night.toFixed(2))
+                }]"
+            />
+        </div>
+
+        <div>
+            <p class="mt-16 overline">Humidity in current week</p>
+            <apexchart
+                type="line" 
+                :options="{
+                    ...options,
+                    yaxis: {
+                        labels: {
+                            formatter: function (value) {
+                                return `${value.toFixed(2)} %`;
+                            }
+                        },
                     },
-                    categories: categories
-                }
-            }" 
-            :series="[{
-                name: 'Opady (mm)',
-                data: weatherData[activeCity].minutely.map(el => el.precipitation.toFixed(2)).splice(0,60)
-            }]"
-        />
+                }" 
+                :series="[{
+                    name: 'Dzień',
+                    data: weatherData[activeCity].daily.map(el => el.humidity)
+                }]"
+            />
+        </div>
+
+        <div v-if="weatherData[activeCity] && activeDay === 0">
+            <p class="mt-16 overline">Precipitation for the next hour</p>
+            <apexchart
+                type="bar" 
+                :options="{
+                    ...options,
+                    yaxis: {
+                        labels: {
+                            formatter: function (value) {
+                                return `${value.toFixed(2)} mm`;
+                            }
+                        },
+                    },
+                    xaxis: {
+                        labels: {
+                            show: false,
+                        },
+                        categories: categories
+                    }
+                }" 
+                :series="[{
+                    name: 'Opady (mm)',
+                    data: weatherData[activeCity].minutely.map(el => el.precipitation.toFixed(2)).splice(0,60)
+                }]"
+            />
+        </div>
     </div>
 </template>
 
@@ -37,6 +83,7 @@ export default class WeatherCharts extends Vue {
     categories = [];
 
     get activeCity() { return store.getters.activeCity }
+    get activeDay() { return store.getters.activeDay }
     get weatherData() {
         if(store.getters.weatherData.length > 0) {
             this.categories = [];
@@ -57,6 +104,7 @@ export default class WeatherCharts extends Vue {
             }
         }
 
+        console.log(store.getters.weatherData);
         return store.getters.weatherData;
     }
 
