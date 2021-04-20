@@ -107,8 +107,8 @@ import store from '../../store/index';
 
 @Component
 export default class WeatherCharts extends Vue {
-    next60minutes = [];
-    next48h = [];
+    next60minutes : any[] = [];
+    next48h : any[] = [];
 
     get activeCity() { return store.getters.activeCity }
     get activeDay() { return store.getters.activeDay }

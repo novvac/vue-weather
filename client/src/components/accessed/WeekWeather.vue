@@ -59,7 +59,7 @@ import store from '../../store/index';
 
 @Component
 export default class WeekWeather extends Vue {
-    @Prop(Array) readonly items;
+    @Prop(Array) readonly items : any[] = []
 
     WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     headers = [
@@ -70,7 +70,7 @@ export default class WeekWeather extends Vue {
     ]
     selectedDay = 0;
 
-    dtToHumanfriendly(index, dt) {
+    dtToHumanfriendly(index : number, dt : number) {
         if(index === 0)
             return "Today";
         else if(index === 1)
@@ -79,7 +79,7 @@ export default class WeekWeather extends Vue {
             return this.WEEK_DAYS[new Date(dt * 1000).getDay()]
     }
 
-    rowClick(value) {
+    rowClick() {
         store.dispatch("SET_ACTIVE_DAY", this.selectedDay);
     }
 }

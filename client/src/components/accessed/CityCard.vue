@@ -41,9 +41,20 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import store from '../../store/index';
 import { axiosInstance } from '../../config/axios';
 
+interface CityObject  {
+    id: number,
+    city: string,
+    country: string,
+    img: string, 
+    coord: {
+        lat: number,
+        lon: number
+    }
+}
+
 @Component
 export default class CityCard extends Vue {
-    @Prop(Object) readonly city: object | undefined
+    @Prop(Object) readonly city: CityObject = {id: 0, city: "", country: "",img: "", coord: {lat: 0,lon: 0}}
 
     customImg = null;
     loading = false;
@@ -66,7 +77,6 @@ export default class CityCard extends Vue {
                 this.loading = false;
             })
         }).catch(() => {
-            this.$toast.error("Connection error! Try refresh the page!");
             this.loading = false;
             store.dispatch("SET_HANDY_LOADER", false);
         })

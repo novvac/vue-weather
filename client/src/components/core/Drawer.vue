@@ -99,6 +99,10 @@ import WeatherCharts from '../accessed/WeatherCharts.vue';
 const WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
+interface itemInterface {
+    dt: number
+}
+
 @Component({
     components: {
         WeatherCharts
@@ -124,9 +128,9 @@ export default class Drawer extends Vue {
     }
 
     interval = null;
-    item = null;
+    item : itemInterface = {dt: 0}!;
 
-    date(mode) {
+    date(mode : string) {
         let dt = new Date(this.item.dt * 1000);;
 
         if(mode === "day") {
@@ -140,11 +144,11 @@ export default class Drawer extends Vue {
         
         return `${WEEK_DAYS[dt.getDay()].slice(0,3)}, ${dt.getDate()} ${MONTHS[dt.getMonth()].slice(0,3)}`
     }
-    time(dt) {
+    time(dt : number) {
         let date = new Date(dt);
         return `${date.getHours()}:${date.getMinutes()}`;
     }
-    toggleDrawer(value) {
+    toggleDrawer(value : boolean) {
         store.dispatch('TOGGLE_DRAWER', value);
     }
 }

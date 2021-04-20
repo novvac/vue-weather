@@ -166,7 +166,7 @@
 
 <script lang="ts">
 import {Vue, Component, Watch} from 'vue-property-decorator'
-import { cloneDeep } from 'lodash';
+import _ from 'lodash';
 import * as i18nIsoCountries from 'i18n-iso-countries';
 i18nIsoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 import store from '../../store/index';
@@ -216,9 +216,9 @@ export default class Main extends Vue {
         this.search.dialog = true;
         this.search.loading = true;
         this.$http.get(`https://openweathermap.org/data/2.5/find?&q=${this.search.value}&type=like&sort=population&cnt=30&appid=439d4b804bc8187953eb36d2a8c26a02&_=${Date.now()}`)
-            .then(res => {
+            .then((res : any) => {
                 let list = res.data.list;
-                list.map(el => {
+                list.map((el: any) => {
                     el.main.temp = (parseFloat(el.main.temp) - 273.15).toFixed(1);
                     el.sys.country = i18nIsoCountries.getName(el.sys.country, "en", {select: "official"});
                     return el;
@@ -227,14 +227,14 @@ export default class Main extends Vue {
                 this.search.items = list;
                 this.search.loading = false;
             })
-            .catch(err => {
+            .catch((err : any) => {
                 console.log(err.response);
                 this.search.loading = false;
             })
     }
 
     addCity() {
-        const obj = cloneDeep(this.search.selected[0]);
+        const obj = _.cloneDeep(this.search.selected[0]);
         let names = i18nIsoCountries.getNames("en", {select: 'official'});
         
         if(obj.sys.country.length > 8) {
@@ -260,7 +260,7 @@ export default class Main extends Vue {
         })
     }
 
-    setActiveCity(id) {
+    setActiveCity(id : number) {
         store.dispatch("SET_ACTIVE_CITY", id);
     }
     toggleDrawer() {
