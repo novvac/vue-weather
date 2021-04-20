@@ -8,26 +8,7 @@
         v-model="drawer && cities.length > 0"
     >
         <v-row class="ma-6 mr-16" align="center" justify="space-between">
-            <div>
-                <base-button
-                    v-for="(btn, i) in buttons"
-                    :key="i"
-                    text
-                    class="white--text body-1 text-none mr-3 drawer-option"
-                >
-                    {{btn.text}}
-
-                    <v-chip 
-                        v-if="btn.chip"
-                        small
-                        label
-                        class="ml-3 px-2 error caption d-flex justify-center align-center"
-                    >
-                        {{btn.chip}}
-                    </v-chip>
-                </base-button>
-            </div>
-
+            <v-spacer></v-spacer>
             <v-badge
                 color="red"
                 offset-x="8"
@@ -45,7 +26,7 @@
         <div class="d-flex justify-center py-16" v-if="!weatherData[activeCity]">
             <v-progress-circular indeterminate size="64" width="1" class="mx-auto"/>
         </div>
-        <div class="ma-6 my-16" v-else>
+        <div class="ma-6 mr-16" v-else>
             <v-row class="ma-0" justify="center" align="center">
                 <v-img :title="item.current.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.current.weather[0].icon}@4x.png`" width="72"/>
             
@@ -85,25 +66,33 @@
                 <span class="mx-3">
                     <v-icon class="mr-1" color="white">mdi-weather-windy</v-icon> {{item.current.wind_speed.toFixed(1)}} m/s
                 </span>
-            </div>
+            </div>            
         </div>
+        
+        <weather-charts/>
     </v-navigation-drawer>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import {Vue, Component} from 'vue-property-decorator';
 import store from '../../store/index';
+import WeatherCharts from '../accessed/WeatherCharts.vue';
 
 const WEEK_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
 
-@Component
+@Component({
+    components: {
+        WeatherCharts
+    }
+})
 export default class Drawer extends Vue {
     get drawer() { return store.getters.drawer }
     get cities() { return store.getters.cities }
     get activeCity() { return store.getters.activeCity }
     get weatherData() { return store.getters.weatherData }
+
+    interval = null;
 
     get item() {
         return this.weatherData[this.activeCity];
@@ -115,14 +104,7 @@ export default class Drawer extends Vue {
     time(dt) {
         let date = new Date(dt);
         return `${date.getHours()}:${date.getMinutes()}`;
-    } 
-
-    buttons = [
-        {
-            text: "Notifications",
-            chip: 1,
-        },
-    ]
+    }
 }
 </script>
 

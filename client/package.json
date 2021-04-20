@@ -8,10 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "apexcharts": "^3.26.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "i18n-iso-countries": "^6.7.0",
     "vue": "^2.6.11",
+    "vue-apexcharts": "^1.6.1",
     "vue-class-component": "^7.2.3",
     "vue-particles": "^1.0.9",
     "vue-property-decorator": "^9.1.2",

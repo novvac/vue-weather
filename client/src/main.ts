@@ -8,13 +8,16 @@ import VueParticles from 'vue-particles';
 import { axiosInstance } from './config/axios';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import VueApexCharts from "vue-apexcharts";
 
 Vue.config.productionTip = false
 Vue.use(VueParticles);
 Vue.use(VueToast, {
   position: 'top-right'
 });
+Vue.use(VueApexCharts);
 
+Vue.component('apexchart', VueApexCharts);
 Vue.prototype.$http = axiosInstance;
 
 new Vue({
