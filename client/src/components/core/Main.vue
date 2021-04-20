@@ -4,6 +4,7 @@
             fluid
             class="pa-4 pa-sm-8 pa-md-16"
         >
+            <!-- ####################################################################### -->
             <v-row class="ma-0" justify="space-between" align="center">
                 <v-text-field
                     class="search-input white"
@@ -41,11 +42,13 @@
                     </v-btn>
                 </div>
             </v-row>
-
+            
+            <!-- ####################################################################### -->
             <div class="mt-10 mb-12 display-1 primary--text text-center text-md-left">
                 Weather <b>Forecast</b>
             </div>
 
+            <!-- ####################################################################### -->
             <v-slide-group show-arrows>
                 <v-slide-item
                     v-for="(item, i) in cities"
@@ -63,17 +66,15 @@
                 </v-slide-item>
             </v-slide-group>
 
+            <!-- ####################################################################### -->
             <div class="mt-10" v-if="cities.length > 0">
                 <v-row class="ma-0">
                     <v-btn
-                        v-for="(item, i) in periods"
-                        :key="item.text"
                         large
                         class="mr-10 text-none body-2 elevation-0"
-                        :color="activePeriod === i ? 'primary' : null"
-                        @click="changePeriod(i)"
+                        color="primary"
                     >
-                        {{item.text}}
+                        Week
                     </v-btn>
                 </v-row>
 
@@ -83,6 +84,7 @@
                 <b>Nie dodałeś/aś jeszcze żadnego miasta!</b>
             </div>
 
+            <!-- ####################################################################### -->
             <v-dialog 
                 v-model="search.dialog" 
                 max-width="1200" 
@@ -127,7 +129,7 @@
                             :single-select="true"
                             show-select
                         >
-                            <template v-slot:item.actions="{ item }">
+                            <template v-slot:[`item.actions`]="{ item }">
                                 <v-btn icon small :href="`https://maps.google.com/?q=${Object.values(item.coord)}&ll=${Object.values(item.coord)}&z=10`" target='_blank'>
                                     <v-icon
                                         small
@@ -137,7 +139,7 @@
                                 </v-btn>
                             </template>
 
-                            <template v-slot:item.weather_icon="{ item }">
+                            <template v-slot:[`item.weather_icon`]="{ item }">
                                 <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="42" class="mx-auto"/>
                             </template>
                         </v-data-table>
@@ -181,7 +183,6 @@ import WeekWeather from '../accessed/WeekWeather.vue';
     }
 })
 export default class Main extends Vue {
-    model = null;
     search = {
         value: "",
         dialog: false,
@@ -198,38 +199,17 @@ export default class Main extends Vue {
         {text: "Lon", sortable: false, align: "center", value: 'coord.lon'},
         {text: "Actions", sortable: false, align: "center", value: 'actions'},
     ];
-    activePeriod = 0;
-    periods =  [
-        {
-            text: "Week"
-        },
-    ];
 
-    get drawer() {
-        return store.getters.drawer;
-    }
-
-    get cities() {
-        return store.getters.cities;
-    }
-
-    get activeCity() {
-        return store.getters.activeCity;
-    }
-
-    get weatherData() {
-        return store.getters.weatherData;
-    }
+    get drawer() { return store.getters.drawer }
+    get cities() { return store.getters.cities }
+    get activeCity() { return store.getters.activeCity }
+    get weatherData() { return store.getters.weatherData }
 
     @Watch('search.loading')
     onSearchDialogChanged(val: boolean) {
         if(val) {
             this.search.selected = [];
         }
-    }
-
-    changePeriod(index) {
-        this.activePeriod = index;
     }
 
     searchPlace() {

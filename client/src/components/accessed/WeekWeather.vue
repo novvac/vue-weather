@@ -80,7 +80,6 @@ export default class WeekWeather extends Vue {
     }
 
     rowClick(value) {
-        console.log(this.selectedDay);
         store.dispatch("SET_ACTIVE_DAY", this.selectedDay);
     }
 }
