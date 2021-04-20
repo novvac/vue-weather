@@ -12,6 +12,7 @@ export default new Vuex.Store({
       cities: [],
     },
     activeCity: undefined,
+    activeDay: 0,
     weatherData: [],
     interval: null,
     handyLoader: false,
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     },
     activeCity(state) {
       return state.activeCity;
+    },
+    activeDay(state) {
+      return state.activeDay;
     },
     weatherData(state) {
       return state.weatherData;
@@ -54,6 +58,9 @@ export default new Vuex.Store({
       } else {
         state.activeCity = index;
       }
+    },
+    setActiveDay(state, val) {
+      state.activeDay = val;
     },
     setWeatherData(state, payload) {
       state.weatherData = payload;
@@ -156,6 +163,9 @@ export default new Vuex.Store({
     SET_ACTIVE_CITY({commit}, index) {
       localStorage.setItem("active-city", index);
       commit("setActiveCity", index);
+    },
+    SET_ACTIVE_DAY({commit}, value) {
+      commit("setActiveDay", value);
     },
     UPDATE_WEATHER({commit, dispatch, state}) {
       commit("setHandyLoader", true);

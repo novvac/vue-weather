@@ -28,19 +28,33 @@
         </div>
         <div class="ma-6 mr-16" v-else>
             <v-row class="ma-0" justify="center" align="center">
-                <v-img :title="item.current.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.current.weather[0].icon}@4x.png`" width="72"/>
+                <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="72"/>
             
                 <div class="text-center ml-2">
-                    <span class="display-1 d-block">Today</span>
+                    <span class="display-1 d-block">{{date("day")}}</span>
                     <span class="d-block body-2 mt-1">
-                        {{date}}
+                        {{date()}}
                     </span>
                 </div>
             </v-row>
 
             <div class="d-flex justify-center" style="color: #ddd; font-size: 8rem; font-weight: 100;">
-                {{item.current.temp.toFixed(1)}}
-                <span class="text-h3 mt-10" style="color: #aaa">°C</span>
+                <div v-if="activeDay === 0"> 
+                    <span >{{item.temp.toFixed(1)}}</span>
+                    <span class="text-h3 mt-10" style="color: #aaa">°C</span>
+                </div>
+                <div v-else class="text-h2 mt-8 mb-4 d-flex flex-column">
+                    <div class="d-flex align-center">
+                        <v-icon large class="mr-8" color="white">mdi-weather-sunny</v-icon>
+                        {{item.temp.day.toFixed(1)}}°
+                        <span class="body-1 ml-6">{{item.feels_like.day.toFixed(1)}}°C</span>
+                    </div>
+                    <div class="d-flex align-center mt-2">
+                        <v-icon large class="mr-8" color="white">mdi-weather-night</v-icon>
+                        {{item.temp.night.toFixed(1)}}°
+                        <span class="body-1 ml-6">{{item.feels_like.night.toFixed(1)}}°C</span>
+                    </div>
+                </div>
             </div>
 
             <p class="body-1 text-center">
@@ -48,23 +62,23 @@
             </p>
 
             <div class="text-center body-2">
-                <span class="mx-3">
-                    Feels like <b>{{item.current.feels_like.toFixed(1)}}</b>
+                <span class="mx-3" v-if="activeDay === 0">
+                    Feels like <b>{{item.feels_like.toFixed(1)}}</b>
                 </span>
                 <span class="mr-2 ml-6">
-                    <v-icon class="mr-1" color='white'>mdi-weather-sunset-up</v-icon> {{time(item.current.sunrise * 1000)}}
+                    <v-icon class="mr-1" color='white'>mdi-weather-sunset-up</v-icon> {{time(item.sunrise * 1000)}}
                 </span>
                 <span class="ml-2">
-                    <v-icon class="mr1" color="white">mdi-weather-sunset-down</v-icon> {{time(item.current.sunset * 1000)}}
+                    <v-icon class="mr1" color="white">mdi-weather-sunset-down</v-icon> {{time(item.sunset * 1000)}}
                 </span>
             </div>
             <div class="text-center body-2 mt-2">
                 <span class="mx-3">
-                    <v-icon class="mr-1" color="white">mdi-weight</v-icon> {{item.current.pressure}} hPa
+                    <v-icon class="mr-1" color="white">mdi-weight</v-icon> {{item.pressure}} hPa
                 </span>
 
                 <span class="mx-3">
-                    <v-icon class="mr-1" color="white">mdi-weather-windy</v-icon> {{item.current.wind_speed.toFixed(1)}} m/s
+                    <v-icon class="mr-1" color="white">mdi-weather-windy</v-icon> {{item.wind_speed.toFixed(1)}} m/s
                 </span>
             </div>            
         </div>
@@ -74,12 +88,12 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import store from '../../store/index';
 import WeatherCharts from '../accessed/WeatherCharts.vue';
 
-const WEEK_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const MONTHS = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec']
+const WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 @Component({
     components: {
@@ -90,16 +104,37 @@ export default class Drawer extends Vue {
     get drawer() { return store.getters.drawer }
     get cities() { return store.getters.cities }
     get activeCity() { return store.getters.activeCity }
+    get activeDay() {return store.getters.activeDay }
     get weatherData() { return store.getters.weatherData }
 
-    interval = null;
-
-    get item() {
-        return this.weatherData[this.activeCity];
+    @Watch('activeCity')
+    @Watch('activeDay')
+    @Watch('weatherData')
+    onDataChanged() {
+        if(store.getters.weatherData) {
+            if(store.getters.activeDay > 0)
+                this.item = store.getters.weatherData[store.getters.activeCity].daily[store.getters.activeDay];
+            else
+                this.item = store.getters.weatherData[store.getters.activeCity].current;
+        }
     }
-    get date() {
-        let dt = new Date(this.item.current.dt * 1000);
-        return `${WEEK_DAYS[dt.getDay()]}, ${dt.getDate()} ${MONTHS[dt.getMonth()]}`
+
+    interval = null;
+    item = "dfdsg";
+
+    date(mode) {
+        let dt = new Date(this.item.dt * 1000);;
+
+        if(mode === "day") {
+            if(store.state.activeDay === 0)
+                return "Now";
+            else if(store.state.activeDay === 1)
+                return "Yesterday";
+            
+            return WEEK_DAYS[dt.getDay()];
+        }
+        
+        return `${WEEK_DAYS[dt.getDay()].slice(0,3)}, ${dt.getDate()} ${MONTHS[dt.getMonth()].slice(0,3)}`
     }
     time(dt) {
         let date = new Date(dt);
