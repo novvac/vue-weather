@@ -43,7 +43,7 @@
                             :buffer-value="(100*item.temp.night)/50 * -1"
                             :value="(100*item.temp.night)/50"
                             stream
-                            :color="primary"
+                            color="primary"
                             style="width: 50%"
                         />
                     </div>

@@ -5,16 +5,27 @@ import { axiosInstance } from '../config/axios';
 
 Vue.use(Vuex)
 
+interface CityInterface {
+  id: number,
+  city: string,
+  country: string,
+  img: string,
+  coord: {
+    lat: number,
+    lon: number
+  }
+}
+
 export default new Vuex.Store({
   state: {
     isAuthenticated: null,
     user: {
-      cities: [],
+      cities: Array(),
     },
-    activeCity: undefined,
+    activeCity: 0,
     activeDay: 0,
     weatherData: [],
-    interval: null,
+    interval: Number(),
     handyLoader: false,
     drawer: false,
   },
@@ -49,10 +60,11 @@ export default new Vuex.Store({
       state.user.cities = payload;
     },
     setActiveCity(state, index) {
-      if(localStorage.getItem("active-city")) {
-        state.activeCity = localStorage.getItem("active-city");
+      const _activeCity : string = localStorage.getItem('active-city')!;
+      if(_activeCity) {
+        state.activeCity = parseInt(_activeCity);
 
-        if(parseInt(localStorage.getItem("active-city")) >= parseInt(state.user.cities.length)) {
+        if(parseInt(_activeCity) >= state.user.cities.length) {
           state.activeCity = 0;
         }
       } else {
@@ -74,14 +86,15 @@ export default new Vuex.Store({
       else
         state.drawer = !state.drawer;
 
-      localStorage.setItem('drawer', state.drawer);
+      localStorage.setItem('drawer', state.drawer.toString());
     }
   },
   actions: {
     SET_USER({commit, dispatch, state}, payload) {
-      function login(user) {
+      function login(user : any) {
         commit("setUser", user);
         commit("setAuthenticated", true);
+        const _drawer : string = localStorage.getItem("drawer")!;
 
         if(user.cities.length > 0)
           commit("setActiveCity", 0)
@@ -142,8 +155,9 @@ export default new Vuex.Store({
         let citiesIds = state.user.cities.map(el => el.id);
         let citiesRef = state.user.cities;
         citiesRef.splice(citiesIds.indexOf(id), 1);
+        const _activeCity : string = localStorage.getItem("active-city")!;
 
-        if(parseInt(localStorage.getItem("active-city")) >= parseInt(state.user.cities.length)) {
+        if(parseInt(_activeCity) >= state.user.cities.length) {
           state.activeCity = state.user.cities.length - 1;
         }
         
@@ -177,7 +191,7 @@ export default new Vuex.Store({
           dispatch("UPDATE_WEATHER");           // ...and update wether for all cities
         }, 60000);
 
-        function cityWeather(city : object) {
+        function cityWeather(city : CityInterface) {
           return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
         }
   

@@ -166,7 +166,7 @@ export default class Auth extends Vue {
         const url = this.logging ? "/api/auth/login" : "/api/auth/register";
         
         this.$http.post(url, this.credentials)
-            .then(res => {
+            .then((res : any) => {
                 this.loading = false;
                 this.errors = {};
                 this.credentials = {email: "", password: "", repassword: ""};
@@ -178,7 +178,7 @@ export default class Auth extends Vue {
                     this.$toast.success("Account was created!");
                 }
             })
-            .catch(err => {
+            .catch((err : any) => {
                 this.errors = err.response.data;
                 this.loading = false;
             })

@@ -1,5 +1,5 @@
 <template>
-    <div class="mr-16">
+    <div class="mr-16" v-if="weatherData.length > 0">
         <div v-if="weatherData[activeCity] && activeDay === 0">
             <p class="mt-16 overline">Precipitation for the next hour</p>
             <apexchart
@@ -17,7 +17,7 @@
                         labels: {
                             show: false,
                         },
-                        categories: categories
+                        categories: next60minutes
                     }
                 }" 
                 :series="[{
@@ -107,14 +107,14 @@ import store from '../../store/index';
 
 @Component
 export default class WeatherCharts extends Vue {
-    categories = [];
+    next60minutes = [];
     next48h = [];
 
     get activeCity() { return store.getters.activeCity }
     get activeDay() { return store.getters.activeDay }
     get weatherData() {
         if(store.getters.weatherData.length > 0) {
-            this.categories = [];
+            this.next60minutes = [];
             const data = store.getters.weatherData;
             let initialDate = new Date(data[this.activeCity].minutely[0].dt * 1000);
             let hours = initialDate.getHours();
@@ -144,14 +144,14 @@ export default class WeatherCharts extends Vue {
                     minutes = 0;
                 }
                 
-                this.categories.push(`${hours >= 10 ? hours : '0'+hours}:${minutes >= 10 ? minutes : '0'+minutes}`);
+                this.next60minutes.push(`${hours >= 10 ? hours : '0'+hours}:${minutes >= 10 ? minutes : '0'+minutes}`);
 
                 minutes += 1;
             }
+            return store.getters.weatherData;
         }
 
-        console.log(store.getters.weatherData);
-        return store.getters.weatherData;
+        return [];
     }
 
     options =  {

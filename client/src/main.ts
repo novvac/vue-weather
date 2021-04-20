@@ -20,6 +20,12 @@ Vue.use(VueApexCharts);
 Vue.component('apexchart', VueApexCharts);
 Vue.prototype.$http = axiosInstance;
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    $http: any
+  }
+}
+
 new Vue({
   router,
   store,
