@@ -4,14 +4,14 @@
         right
         :width="$vuetify.breakpoint.smAndDown ? '100%': '36%'"
         touchless
-        class="pa-10 pr-0 drawer secondary white--text"
+        class="pa-2 pa-md-10 pr-0 drawer secondary white--text"
         floating
         v-model="drawer && cities.length > 0"
     >
-        <v-row class="ma-6 mr-16" align="center" justify="space-between">
-            <base-button large icon class="d-lg-none" @click="toggleDrawer(false)">
+        <v-row class="ma-6 mr-md-16" align="center" justify="space-between">
+            <v-btn large icon class="d-lg-none" @click="toggleDrawer(false)">
                 <v-icon color="white">mdi-close</v-icon>
-            </base-button>
+            </v-btn>
             <v-spacer/>
             <v-badge
                 color="red"
@@ -27,10 +27,10 @@
             </v-badge>
         </v-row>
 
-        <div class="d-flex justify-center py-16" v-if="!weatherData[activeCity]">
+        <div class="d-flex justify-center py-md-16" v-if="!weatherData[activeCity]">
             <v-progress-circular indeterminate size="64" width="1" class="mx-auto"/>
         </div>
-        <div class="ma-6 mr-16" v-else>
+        <div class="ma-6 mr-md-16" v-else>
             <v-row class="ma-0" justify="center" align="center">
                 <v-img :title="item.weather[0].description" :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`" width="72"/>
             

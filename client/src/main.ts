@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import './components/base/index';
 import VueParticles from 'vue-particles';
 import { axiosInstance } from './config/axios';
 import VueToast from 'vue-toast-notification';
@@ -22,7 +21,7 @@ Vue.prototype.$http = axiosInstance;
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $http: any
+    $http: any,
   }
 }
 

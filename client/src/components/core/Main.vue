@@ -5,7 +5,7 @@
             class="pa-4 pa-sm-8 pa-md-16"
         >
             <v-row class="ma-0" justify="space-between" align="center">
-                <base-input
+                <v-text-field
                     class="search-input white"
                     solo
                     flat
@@ -21,16 +21,16 @@
                     class="mt-5 mt-md-0 d-flex justify-space-around align-center"
                     :style="{width: $vuetify.breakpoint.smAndDown ? '100%' : 'auto'}"
                 >
-                    <base-button
+                    <v-btn
                         large icon 
                         color="primary" 
                         @click="logout()"
                         class="mr-3"
                     >
                         <v-icon>mdi-logout</v-icon>
-                    </base-button>
+                    </v-btn>
 
-                    <base-button
+                    <v-btn
                         large icon 
                         color="primary" 
                         @click="toggleDrawer()"
@@ -38,7 +38,7 @@
                     >
                         <v-icon v-if="!drawer">mdi-arrow-left</v-icon>
                         <v-icon v-else>mdi-arrow-right</v-icon>
-                    </base-button>
+                    </v-btn>
                 </div>
             </v-row>
 
@@ -65,7 +65,7 @@
 
             <div class="mt-10" v-if="cities.length > 0">
                 <v-row class="ma-0">
-                    <base-button
+                    <v-btn
                         v-for="(item, i) in periods"
                         :key="item.text"
                         large
@@ -74,7 +74,7 @@
                         @click="changePeriod(i)"
                     >
                         {{item.text}}
-                    </base-button>
+                    </v-btn>
                 </v-row>
 
                 <week-weather :items="weatherData[activeCity] ? weatherData[activeCity].daily : []"/>
@@ -89,18 +89,18 @@
                 persistent
                 content-class="elevation-0"
             >
-                <base-card class="px-8 py-5" rounded="24">
+                <v-card class="px-8 py-5" rounded="24">
                     <v-row class="ma-0" align="center" justify="space-between">
                         <span class="font-weight-bold body-2">City search</span>
 
-                        <base-button icon @click="search.dialog=false">
+                        <v-btn icon @click="search.dialog=false">
                             <v-icon>mdi-close</v-icon>
-                        </base-button>
+                        </v-btn>
                     </v-row>
 
                     <v-divider class="mt-2 mb-5"></v-divider>
 
-                    <base-input
+                    <v-text-field
                         class="search-input white mb-5"
                         solo-inverted
                         flat
@@ -128,13 +128,13 @@
                             show-select
                         >
                             <template v-slot:item.actions="{ item }">
-                                <base-button icon small :href="`https://maps.google.com/?q=${Object.values(item.coord)}&ll=${Object.values(item.coord)}&z=10`" target='_blank'>
+                                <v-btn icon small :href="`https://maps.google.com/?q=${Object.values(item.coord)}&ll=${Object.values(item.coord)}&z=10`" target='_blank'>
                                     <v-icon
                                         small
                                     >
                                         mdi-map-marker
                                 </v-icon>
-                                </base-button>
+                                </v-btn>
                             </template>
 
                             <template v-slot:item.weather_icon="{ item }">
@@ -145,7 +145,7 @@
                         <v-divider></v-divider>
 
                         <v-row class="ma-0" justify="center">
-                            <base-button
+                            <v-btn
                                 text
                                 class="mt-3"
                                 color="primary"
@@ -153,10 +153,10 @@
                                 @click="addCity()"
                             >
                                 Save city
-                            </base-button>
+                            </v-btn>
                         </v-row>
                     </div>
-                </base-card>
+                </v-card>
             </v-dialog>
         </v-container>
     </v-main>

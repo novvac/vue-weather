@@ -16,6 +16,10 @@ const routes: Array<RouteConfig> = [
     name: "Authorization",
     component: () => import('../views/Auth.vue')
   },
+  {
+    path: "/*",
+    redirect: "/"
+  }
 ];
 
 const router = new VueRouter({

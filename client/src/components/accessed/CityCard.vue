@@ -13,7 +13,7 @@
             <span>{{city.city}}</span><span id="comma">,</span> <span>{{city.country}}</span>
         </p>
 
-        <base-button 
+        <v-btn 
             icon 
             class="error"
             style="right: 0;"
@@ -21,9 +21,9 @@
             :disabled="loading"
         >
             <v-icon color="white">mdi-close</v-icon>
-        </base-button>
+        </v-btn>
 
-        <base-button 
+        <v-btn 
             icon 
             class="blue"
             style="left: 0;"
@@ -31,7 +31,7 @@
             :disabled="loading"
         >
             <v-icon color="white">mdi-camera</v-icon>
-        </base-button>
+        </v-btn>
 
     </v-card>
 </template>

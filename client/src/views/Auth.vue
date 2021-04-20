@@ -1,7 +1,7 @@
 <template>
     <div class="auth">
         <v-row class="ma-0" :style="{flexDirection: 'row' + (logging ? '-reverse' : '')}">
-            <v-col cols="5" :class="[logging ? 'success' : 'red', 'd-none', 'd-md-block', 'pa-0']" style="position: relative;">
+            <v-col cols="5" :class="[logging ? 'success' : 'orange', 'd-none', 'd-md-block', 'pa-0']" style="position: relative;">
                 <vue-particles
                     class="particles"
                     color="#dedede"
@@ -27,7 +27,7 @@
 
                     <p class="mb-10 mt-8 mx-10 body-1">Lorem ipsum, dolor sit amet consectetur adipisicing elit. A, est labore unde ipsa laborum quia officiis nobis debitis porro dolore omnis architecto quam? Magni magnam saepe beatae nulla animi enim.</p>
                 
-                    <base-button
+                    <v-btn
                         x-large
                         outlined
                         color="white"
@@ -35,7 +35,7 @@
                         @click="logging = !logging"
                     >
                         {{logging ? "Sign up" : "Sign in"}}
-                    </base-button>
+                    </v-btn>
                 </div>
             </v-col>
 
@@ -45,17 +45,17 @@
                         {{logging ? "Logging into app" : "Create free account"}}
                     </span>
 
-                    <base-button
+                    <v-btn
                         small
                         outlined
                         class="mt-5 d-md-none"
                         @click="logging = !logging"
                     >
                         {{logging ? "Sign up" : "Sign in"}}
-                    </base-button>
+                    </v-btn>
 
                     <p class="body-1 mt-8 mb-6">Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
-                    <base-input
+                    <v-text-field
                         placeholder="Email address"
                         prepend-inner-icon="mdi-email"
                         filled
@@ -69,7 +69,7 @@
                         :error="Boolean(errors.email)"
                         :error-messages="errors.email"
                     />
-                    <base-input
+                    <v-text-field
                         placeholder="Password"
                         prepend-inner-icon="mdi-lock"
                         filled
@@ -83,7 +83,7 @@
                         :error="Boolean(errors.password)"
                         :error-messages="errors.password"
                     />
-                    <base-input
+                    <v-text-field
                         placeholder="Repeat password"
                         prepend-inner-icon="mdi-lock"
                         filled
@@ -100,7 +100,7 @@
                     />
                     <p class="body-1 mt-2 mb-8 caption" v-if="!logging">By creating an account, you accept the <a href="#terms-and-conditions">terms and conditions</a> of our website.</p>
 
-                    <base-button
+                    <v-btn
                         outlined
                         x-large
                         rounded
@@ -110,7 +110,7 @@
                         @click="submitForm()"
                     >
                         {{logging ? "Sign in" : "Sign up"}}
-                    </base-button>
+                    </v-btn>
                 </v-container>
             </v-col>
         </v-row>

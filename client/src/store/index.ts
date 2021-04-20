@@ -90,24 +90,29 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    SET_USER({commit, dispatch, state}, payload) {
+    SET_USER({commit, dispatch}, payload) {
       function login(user : any) {
         commit("setUser", user);
         commit("setAuthenticated", true);
         const _drawer : string = localStorage.getItem("drawer")!;
 
+        // if user is logged and have any cities. Set active city to first of them
         if(user.cities.length > 0)
           commit("setActiveCity", 0)
-        if(localStorage.getItem("drawer") === "true") {
+        // if drawer was saved to localstorage with "true" - open drawer
+        if(_drawer === "true") {
           dispatch("TOGGLE_DRAWER", true);
         }
 
         dispatch("UPDATE_WEATHER");   // first update weather
       }
 
+      // if payload (user object after clicked 'sign in') provided
       if(payload) {
+        // save them
         login(payload);
       } else {
+        // else, load user with token (token saved in cookies with HttpOnly)
         return axiosInstance.get("/api/user/")
           .then(res => {
             login(res.data);
@@ -137,6 +142,7 @@ export default new Vuex.Store({
         }])
         Vue.$toast.success(payload.city + " was added to watched!");
 
+        // if added city is first - set active city to them and open drawer
         if(state.user.cities.length === 1) {
           dispatch("SET_ACTIVE_CITY", 0);
           dispatch("TOGGLE_DRAWER", true);
@@ -157,6 +163,7 @@ export default new Vuex.Store({
         citiesRef.splice(citiesIds.indexOf(id), 1);
         const _activeCity : string = localStorage.getItem("active-city")!;
 
+        // if active city index is out of scope - set active city to last of cities
         if(parseInt(_activeCity) >= state.user.cities.length) {
           state.activeCity = state.user.cities.length - 1;
         }
@@ -195,11 +202,13 @@ export default new Vuex.Store({
           return axiosInstance.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.coord.lat}&lon=${city.coord.lon}&units=metric&appid=d8a55c1870426b0d48e5a2ddad306894`);
         }
   
+        // requests for all cities
         let requests = [];
         for(let i=0; i<state.user.cities.length; i++) {
           requests.push(cityWeather(state.user.cities[i]));
         }
   
+        // make all request "by one"
         axios.all(requests).then(res => {
           let obj = res.map(el => {
             return el.data;

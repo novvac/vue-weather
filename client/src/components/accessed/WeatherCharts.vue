@@ -1,5 +1,5 @@
 <template>
-    <div class="mr-16" v-if="weatherData.length > 0">
+    <div class="mr-md-16 mx-3" v-if="weatherData.length > 0">
         <div v-if="weatherData[activeCity] && activeDay === 0">
             <p class="mt-16 overline">Precipitation for the next hour</p>
             <apexchart
