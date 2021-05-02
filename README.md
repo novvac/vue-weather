@@ -2,6 +2,8 @@
 
 Vue weather allows users to select cities and checking weather details in each of them!
 
+[![Example](https://img.shields.io/badge/demo-Working_example-green)](https://vue-weather523.herokuapp.com)
+
 ## Features
 
 The application allows users to create their own accounts so the actions taken by them
@@ -68,12 +70,3 @@ MIT
    [Vuetify]: <https://vuetifyjs.com/en>
    [VueCLI]: <https://cli.vuejs.org>
    [MongoDB]: <https://www.mongodb.com>
-   
-  
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
